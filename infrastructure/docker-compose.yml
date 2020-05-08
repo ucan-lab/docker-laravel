@@ -1,0 +1,41 @@
+version: "3.7"
+volumes:
+  db-store:
+  redis-store:
+  php-fpm-socket:
+services:
+  app:
+    build: ./docker/php
+    volumes:
+      - php-fpm-socket:/var/run/php-fpm
+      - ../backend:/work/backend
+      - ./docker/logs:/var/log/php
+      - ./docker/php/bash/.bash_history:/root/.bash_history
+      - ./docker/php/bash/psysh:/root/.config/psysh
+
+  web:
+    build: ./docker/nginx
+    ports:
+      - 80:80
+    volumes:
+      - php-fpm-socket:/var/run/php-fpm
+      - ../backend:/work/backend
+      - ./docker/logs:/var/log/nginx
+
+  db:
+    build: ./docker/mysql
+    volumes:
+      - db-store:/var/lib/mysql
+      - ./docker/logs:/var/log/mysql
+    ports:
+      - 3306:3306
+
+  redis:
+    image: redis:6.0-alpine
+    volumes:
+      - redis-store:/data
+
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025

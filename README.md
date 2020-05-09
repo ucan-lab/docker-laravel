@@ -16,11 +16,13 @@ Build laravel development environment with docker-compose.
 
 ## Container structure
 
-- app
-- web
-- db
-- redis
-- mail
+```bash
+├── app
+├── web
+├── db
+├── redis
+└── mail
+```
 
 ### app container
 

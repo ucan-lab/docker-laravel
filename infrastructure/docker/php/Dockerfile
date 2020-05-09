@@ -4,11 +4,11 @@ SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 ARG REDIS_VER=5.2.2
 
 # timezone environment
-ENV TZ=Asia/Tokyo \
+ENV TZ=UTC \
   # locale
-  LANG=ja_JP.UTF-8 \
-  LANGUAGE=ja_JP:ja \
-  LC_ALL=ja_JP.UTF-8 \
+  LANG=en_US.UTF-8 \
+  LANGUAGE=en_US:en \
+  LC_ALL=en_US.UTF-8 \
   # composer environment
   COMPOSER_ALLOW_SUPERUSER=1 \
   COMPOSER_HOME=/composer \
@@ -29,8 +29,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN apt-get update && \
   apt-get -y install git libicu-dev libonig-dev libzip-dev unzip locales && \
-  locale-gen ja_JP.UTF-8 && \
-  localedef -f UTF-8 -i ja_JP ja_JP.utf8 && \
+  locale-gen en_US.UTF-8 && \
+  localedef -f UTF-8 -i en_US en_US.UTF-8 && \
   mkdir /var/run/php-fpm && \
   mkdir /var/log/php && \
   git clone -b $REDIS_VER https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \

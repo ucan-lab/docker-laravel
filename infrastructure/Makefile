@@ -10,7 +10,7 @@ create-project:
 	docker-compose exec app composer create-project --prefer-dist laravel/laravel .
 	docker-compose exec app composer require predis/predis
 	docker-compose exec app composer require doctrine/dbal
-install-development-packages:
+install-recommend-packages:
 	docker-compose exec app composer require --dev barryvdh/laravel-ide-helper
 	docker-compose exec app composer require --dev beyondcode/laravel-dump-server
 	docker-compose exec app composer require --dev barryvdh/laravel-debugbar

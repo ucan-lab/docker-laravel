@@ -18,7 +18,7 @@ RUN apk update && \
 
 FROM nginx:1.17-alpine
 
-ENV TZ=Asia/Tokyo
+ENV TZ=UTC
 COPY --from=node /work/backend/public /work/backend/public
 COPY --from=node /work/backend/storage/app/public /work/backend/public/storage
 COPY ./default.conf /etc/nginx/conf.d/default.conf

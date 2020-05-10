@@ -25,26 +25,26 @@ Build laravel development environment with docker-compose.
 ### app container
 
 - Base image
-  - php:7.4-fpm-buster
-  - composer:latest
+  - [php](https://hub.docker.com/_/php):7.4-fpm-buster
+  - [composer](https://hub.docker.com/_/composer):latest
 
 ### web container
 
 - Base image
-  - nginx:1.17-alpine
-  - node:14.2-alpine
+  - [nginx](https://hub.docker.com/_/nginx):1.17-alpine
+  - [node](https://hub.docker.com/_/node):14.2-alpine
 
 ### db container
 
 - Base image
-  - mysql:8.0
+  - [mysql](https://hub.docker.com/_/mysql):8.0
 
 ### redis container
 
 - Base image
-  - redis:6.0-alpine
+  - [redis](https://hub.docker.com/_/redis):6.0-alpine
 
 ### mail container
 
 - Base image
-  - mailhog/mailhog
+  - [mailhog/mailhog](https://hub.docker.com/_/mailhog/mailhog)

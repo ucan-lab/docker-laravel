@@ -36,7 +36,7 @@ RUN apt-get update && \
   git clone -b $REDIS_VER https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \
   docker-php-ext-install intl pdo_mysql mbstring zip bcmath redis && \
   composer config -g process-timeout 3600 && \
-  composer config -g repos.packagist composer https://packagist.jp && \
+  composer config -g repos.packagist composer https://packagist.org && \
   composer global require hirak/prestissimo
 
 COPY ./php-fpm.d/zzz-www.conf /usr/local/etc/php-fpm.d/zzz-www.conf

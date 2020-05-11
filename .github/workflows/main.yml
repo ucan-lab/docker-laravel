@@ -12,3 +12,7 @@ jobs:
           cd infrastructure
           make build
           make up
+          docker-compose exec -T app composer create-project --prefer-dist laravel/laravel .
+          docker-compose exec -T app composer require predis/predis
+          docker-compose exec -T app composer require doctrine/dbal
+          docker-compose exec -T app php artisan --version

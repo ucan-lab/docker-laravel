@@ -15,9 +15,7 @@ ENV TZ=UTC \
   DB_HOST=db \
   DB_DATABASE=laravel_local \
   DB_USERNAME=phper \
-  DB_PASSWORD=secret \
-  MAIL_HOST=mail \
-  MAIL_PORT=1025
+  DB_PASSWORD=secret
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 

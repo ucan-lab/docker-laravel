@@ -1,7 +1,6 @@
 version: "3.7"
 volumes:
   db-store:
-  redis-store:
   php-fpm-socket:
 services:
   app:
@@ -29,8 +28,3 @@ services:
       - ./docker/logs:/var/log/mysql
     ports:
       - 3306:3306
-
-  mail:
-    image: mailhog/mailhog
-    ports:
-      - 8025:8025

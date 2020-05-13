@@ -4,7 +4,6 @@ SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 WORKDIR /work
 
 ARG GITHUB_DEPLOY_PRIVATE_KEY
-ARG REDIS_VER=5.2.2
 
 # timezone environment
 ENV TZ=UTC \
@@ -32,8 +31,7 @@ RUN apt-get update && \
   localedef -f UTF-8 -i en_US en_US.UTF-8 && \
   mkdir /var/run/php-fpm && \
   mkdir /var/log/php && \
-  git clone -b $REDIS_VER https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \
-  docker-php-ext-install intl pdo_mysql mbstring zip bcmath redis opcache && \
+  docker-php-ext-install intl pdo_mysql mbstring zip bcmath opcache && \
   mkdir /tmp/.ssh && \
   echo -e $GITHUB_DEPLOY_PRIVATE_KEY > /tmp/.ssh/deploy_private_key && \
   chmod 700 /tmp/.ssh && \

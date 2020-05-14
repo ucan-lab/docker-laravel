@@ -33,7 +33,7 @@ Build laravel development environment with docker-compose.
 ### web container
 
 - Base image
-  - [nginx](https://hub.docker.com/_/nginx):1.17-alpine
+  - [nginx](https://hub.docker.com/_/nginx):1.18-alpine
   - [node](https://hub.docker.com/_/node):14.2-alpine
 
 ### db container

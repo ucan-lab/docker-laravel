@@ -16,7 +16,7 @@ RUN apk update && \
   yarn && \
   yarn run production
 
-FROM nginx:1.17-alpine
+FROM nginx:1.18-alpine
 
 ENV TZ=UTC
 COPY --from=node /work/backend/public /work/backend/public

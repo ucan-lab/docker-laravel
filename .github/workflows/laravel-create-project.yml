@@ -1,0 +1,30 @@
+name: laravel-create-project
+
+on: pull_request
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Docker Compose Version
+        run: docker-compose --version
+      - name: Build Docker
+        run: |
+          cd infrastructure
+          docker-compose build
+          docker-compose up -d
+          docker-compose ps
+      - name: Create Laravel Project
+        run: |
+          cd infrastructure
+          docker-compose exec -T app composer create-project --prefer-dist laravel/laravel .
+      - name: PHP and Laravel Version
+        run: |
+          cd infrastructure
+          docker-compose exec -T app php --version
+          docker-compose exec -T app php artisan --version
+      - name: Laravel Testing
+        run: |
+          cd infrastructure
+          docker-compose exec -T app php artisan test

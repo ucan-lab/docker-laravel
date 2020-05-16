@@ -7,12 +7,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Docker Compose Version
+        run: docker-compose --version
       - name: Build Docker
         run: |
           cd infrastructure
-          make build
-          make up
+          docker-compose build
+          docker-compose up -d
+          docker-compose ps
+      - name: Create Laravel Project
+        run: |
+          cd infrastructure
           docker-compose exec -T app composer create-project --prefer-dist laravel/laravel .
-          docker-compose exec -T app composer require predis/predis
-          docker-compose exec -T app composer require doctrine/dbal
+      - name: PHP and Laravel Version
+        run: |
+          cd infrastructure
+          docker-compose exec -T app php --version
           docker-compose exec -T app php artisan --version
+          docker network ls
+      - name: Laravel Migrate and Seeding
+        run: |
+          cd infrastructure
+          docker-compose exec -T app php artisan migrate
+          docker-compose exec -T app php artisan db:seed
+      - name: Laravel Testing
+        run: |
+          cd infrastructure
+          docker-compose exec -T app php artisan test

@@ -36,7 +36,6 @@ RUN apt-get update && \
   docker-php-ext-configure gd --with-freetype --with-jpeg && \
   git clone -b $REDIS_VER https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \
   docker-php-ext-install intl pdo_mysql mbstring zip bcmath opcache -j$(nproc) gd && \
-  docker-php-ext-install intl pdo_mysql mbstring zip bcmath opcache && \
   mkdir /tmp/.ssh && \
   echo -e $GITHUB_DEPLOY_PRIVATE_KEY > /tmp/.ssh/deploy_private_key && \
   chmod 700 /tmp/.ssh && \

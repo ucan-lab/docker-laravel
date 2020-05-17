@@ -30,7 +30,6 @@ RUN apt-get update && \
   docker-php-ext-configure gd --with-freetype --with-jpeg && \
   git clone -b $REDIS_VER https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \
   docker-php-ext-install intl pdo_mysql mbstring zip bcmath -j$(nproc) gd && \
-  docker-php-ext-install intl pdo_mysql mbstring zip bcmath && \
   composer config -g process-timeout 3600 && \
   composer config -g repos.packagist composer https://packagist.org && \
   composer global require hirak/prestissimo

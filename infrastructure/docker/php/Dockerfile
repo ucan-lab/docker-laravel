@@ -28,7 +28,6 @@ RUN apt-get update && \
   mkdir /var/run/php-fpm && \
   mkdir /var/log/php && \
   docker-php-ext-configure gd --with-freetype --with-jpeg && \
-  git clone -b $REDIS_VER https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \
   docker-php-ext-install intl pdo_mysql mbstring zip bcmath -j$(nproc) gd && \
   composer config -g process-timeout 3600 && \
   composer config -g repos.packagist composer https://packagist.org && \

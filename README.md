@@ -19,9 +19,7 @@ Build laravel development environment with docker-compose.
 ```bash
 ├── app
 ├── web
-├── db
-├── redis
-└── mail
+└── db
 ```
 
 ### app container
@@ -33,20 +31,10 @@ Build laravel development environment with docker-compose.
 ### web container
 
 - Base image
-  - [nginx](https://hub.docker.com/_/nginx):1.17-alpine
+  - [nginx](https://hub.docker.com/_/nginx):1.18-alpine
   - [node](https://hub.docker.com/_/node):14.2-alpine
 
 ### db container
 
 - Base image
   - [mysql](https://hub.docker.com/_/mysql):8.0
-
-### redis container
-
-- Base image
-  - [redis](https://hub.docker.com/_/redis):6.0-alpine
-
-### mail container
-
-- Base image
-  - [mailhog/mailhog](https://hub.docker.com/_/mailhog/mailhog)

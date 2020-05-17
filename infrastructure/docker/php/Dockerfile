@@ -1,8 +1,6 @@
 FROM php:7.4-fpm-buster
 SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 
-ARG REDIS_VER=5.2.2
-
 # timezone environment
 ENV TZ=UTC \
   # locale
@@ -17,13 +15,7 @@ ENV TZ=UTC \
   DB_HOST=db \
   DB_DATABASE=laravel_local \
   DB_USERNAME=phper \
-  DB_PASSWORD=secret \
-  MAIL_HOST=mail \
-  MAIL_PORT=1025 \
-  REDIS_HOST=redis \
-  CACHE_DRIVER=redis \
-  SESSION_DRIVER=redis \
-  QUEUE_DRIVER=redis
+  DB_PASSWORD=secret
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -37,7 +29,8 @@ RUN apt-get update && \
   mkdir /var/log/php && \
   docker-php-ext-configure gd --with-freetype --with-jpeg && \
   git clone -b $REDIS_VER https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \
-  docker-php-ext-install intl pdo_mysql mbstring zip bcmath redis -j$(nproc) gd && \
+  docker-php-ext-install intl pdo_mysql mbstring zip bcmath -j$(nproc) gd && \
+  docker-php-ext-install intl pdo_mysql mbstring zip bcmath && \
   composer config -g process-timeout 3600 && \
   composer config -g repos.packagist composer https://packagist.org && \
   composer global require hirak/prestissimo

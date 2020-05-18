@@ -25,6 +25,5 @@ services:
     build: ./docker/mysql
     volumes:
       - db-store:/var/lib/mysql
-      - ./docker/logs:/var/log/mysql
     ports:
       - 3306:3306

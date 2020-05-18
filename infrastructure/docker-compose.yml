@@ -8,7 +8,6 @@ services:
     volumes:
       - php-fpm-socket:/var/run/php-fpm
       - ../backend:/work/backend
-      - ./docker/logs:/var/log/php
       - ./docker/php/bash/.bash_history:/root/.bash_history
       - ./docker/php/bash/psysh:/root/.config/psysh
 
@@ -19,12 +18,10 @@ services:
     volumes:
       - php-fpm-socket:/var/run/php-fpm
       - ../backend:/work/backend
-      - ./docker/logs:/var/log/nginx
 
   db:
     build: ./docker/mysql
     volumes:
       - db-store:/var/lib/mysql
-      - ./docker/logs:/var/log/mysql
     ports:
       - 3306:3306

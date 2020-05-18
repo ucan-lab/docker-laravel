@@ -24,6 +24,11 @@ jobs:
           cd infrastructure
           docker-compose exec -T app php --version
           docker-compose exec -T app php artisan --version
+      - name: Laravel Migrate and Seeding
+        run: |
+          cd infrastructure
+          docker-compose exec -T app php artisan migrate
+          docker-compose exec -T app php artisan db:seed
       - name: Laravel Testing
         run: |
           cd infrastructure

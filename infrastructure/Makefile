@@ -48,6 +48,8 @@ web:
 	docker-compose exec web ash
 app:
 	docker-compose exec app bash
+migrate:
+	docker-compose exec app php artisan migrate
 fresh:
 	docker-compose exec app php artisan migrate:fresh
 seed:
@@ -56,11 +58,15 @@ tinker:
 	docker-compose exec app php artisan tinker
 test:
 	docker-compose exec app php artisan test
+optimize:
+	docker-compose exec app php artisan optimize
+optimize-clear:
+	docker-compose exec app php artisan optimize:clear
 cache:
 	docker-compose exec app composer dump-autoload -o
-	docker-compose exec app php artisan optimize
+	@make optimize
 cache-clear:
-	docker-compose exec app php artisan optimize:clear
+	@make optimize-clear
 yarn:
 	docker-compose exec web yarn
 yarn-dev:

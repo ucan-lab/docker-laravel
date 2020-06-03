@@ -48,6 +48,8 @@ web:
 	docker-compose exec web ash
 app:
 	docker-compose exec app bash
+migrate:
+	docker-compose exec app php artisan migrate
 fresh:
 	docker-compose exec app php artisan migrate:fresh
 seed:

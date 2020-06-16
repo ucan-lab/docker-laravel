@@ -79,7 +79,7 @@ yarn-hot:
 	docker-compose exec web yarn run hot
 db:
 	docker-compose exec db bash
-mysql:
+sql:
 	docker-compose exec db bash -c 'mysql -u $$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE'
 redis:
 	docker-compose exec redis redis-cli

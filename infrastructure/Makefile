@@ -13,6 +13,7 @@ install-recommend-packages:
 	docker-compose exec app composer require --dev barryvdh/laravel-ide-helper
 	docker-compose exec app composer require --dev beyondcode/laravel-dump-server
 	docker-compose exec app composer require --dev barryvdh/laravel-debugbar
+	docker-compose exec app composer require --dev roave/security-advisories:dev-master
 	docker-compose exec app php artisan vendor:publish --provider="BeyondCode\DumpServer\DumpServerServiceProvider"
 	docker-compose exec app php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
 init:

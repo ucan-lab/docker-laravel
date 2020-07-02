@@ -52,9 +52,12 @@ app:
 migrate:
 	docker-compose exec app php artisan migrate
 fresh:
-	docker-compose exec app php artisan migrate:fresh
+	docker-compose exec app php artisan migrate:fresh --seed
 seed:
 	docker-compose exec app php artisan db:seed
+rollback-test:
+	docker-compose exec app php artisan migrate:fresh
+	docker-compose exec app php artisan migrate:refresh
 tinker:
 	docker-compose exec app php artisan tinker
 test:
@@ -71,13 +74,13 @@ cache-clear:
 yarn:
 	docker-compose exec web yarn
 yarn-dev:
-	docker-compose exec web yarn run dev
+	docker-compose exec web yarn dev
 yarn-watch:
-	docker-compose exec web yarn run watch
+	docker-compose exec web yarn watch
 yarn-watch-poll:
-	docker-compose exec web yarn run watch-poll
+	docker-compose exec web yarn watch-poll
 yarn-hot:
-	docker-compose exec web yarn run hot
+	docker-compose exec web yarn hot
 db:
 	docker-compose exec db bash
 sql:

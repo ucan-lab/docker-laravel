@@ -18,11 +18,12 @@ jobs:
       - name: Create Laravel Project
         run: |
           cd infrastructure
+          docker-compose exec -T app php --version
+          docker-compose exec -T app composer --version
           docker-compose exec -T app composer create-project --prefer-dist laravel/laravel .
       - name: PHP and Laravel Version
         run: |
           cd infrastructure
-          docker-compose exec -T app php --version
           docker-compose exec -T app php artisan --version
       - name: Laravel Migrate and Seeding
         run: |

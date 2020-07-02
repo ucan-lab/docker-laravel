@@ -19,6 +19,8 @@ jobs:
       - name: Composer Install
         run: |
           cd infrastructure
+          docker-compose exec -T app php --version
+          docker-compose exec -T app composer --version
           docker-compose exec -T app composer install
       - name: Laravel Settings
         run: |
@@ -29,7 +31,6 @@ jobs:
       - name: PHP and Laravel Version
         run: |
           cd infrastructure
-          docker-compose exec -T app php --version
           docker-compose exec -T app php artisan --version
       - name: Laravel Migrate and Seeding
         run: |

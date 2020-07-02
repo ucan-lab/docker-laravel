@@ -55,6 +55,9 @@ fresh:
 	docker-compose exec app php artisan migrate:fresh --seed
 seed:
 	docker-compose exec app php artisan db:seed
+rollback-test:
+	docker-compose exec app php artisan migrate:fresh
+	docker-compose exec app php artisan migrate:refresh
 tinker:
 	docker-compose exec app php artisan tinker
 test:

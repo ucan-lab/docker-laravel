@@ -32,11 +32,11 @@ jobs:
         run: |
           cd infrastructure
           docker-compose exec -T app php artisan --version
-      - name: Laravel Migrate and Seeding
+      - name: Laravel Migrate, Rollback, Seeding Testing
         run: |
           cd infrastructure
           docker-compose exec -T app php artisan migrate
-          docker-compose exec -T app php artisan db:seed
+          docker-compose exec -T app php artisan migrate:refresh --seed
       - name: Laravel Testing
         run: |
           cd infrastructure

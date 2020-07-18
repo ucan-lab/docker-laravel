@@ -8,6 +8,7 @@ create-project:
 	@make build
 	@make up
 	docker-compose exec app composer create-project --prefer-dist laravel/laravel .
+	docker-compose exec app chmod -R 777 storage/ bootstrap/cache/
 install-recommend-packages:
 	docker-compose exec app composer require doctrine/dbal
 	docker-compose exec app composer require --dev barryvdh/laravel-ide-helper

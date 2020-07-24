@@ -1,6 +1,9 @@
 name: laravel-create-project
 
-on: pull_request
+on:
+  pull_request:
+  schedule:
+    - cron:  '0 0 * * *'
 
 jobs:
   docker-build:

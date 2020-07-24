@@ -8,8 +8,6 @@ services:
     volumes:
       - php-fpm-socket:/var/run/php-fpm
       - ../backend:/work/backend
-      - ./docker/php/bash/.bash_history:/root/.bash_history
-      - ./docker/php/bash/psysh:/root/.config/psysh
 
   web:
     build: ./docker/nginx

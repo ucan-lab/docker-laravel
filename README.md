@@ -38,7 +38,7 @@ Read this [Wiki](https://github.com/ucan-lab/docker-laravel/wiki).
 
 - Base image
   - [php](https://hub.docker.com/_/php):7.4-fpm-buster
-  - [composer](https://hub.docker.com/_/composer):1.10
+  - [composer](https://hub.docker.com/_/composer):2.0
 
 ### web container
 

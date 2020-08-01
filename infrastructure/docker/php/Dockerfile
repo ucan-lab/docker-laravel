@@ -16,7 +16,8 @@ ENV TZ=UTC \
   DB_PORT=3306 \
   DB_DATABASE=laravel_local \
   DB_USERNAME=phper \
-  DB_PASSWORD=secret
+  DB_PASSWORD=secret \
+  LOG_CHANNEL=stderr
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 

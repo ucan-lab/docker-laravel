@@ -26,7 +26,7 @@ Build laravel development environment with docker-compose.
 
 - Base image
   - [php](https://hub.docker.com/_/php):7.4-fpm-buster
-  - [composer](https://hub.docker.com/_/composer):latest
+  - [composer](https://hub.docker.com/_/composer):1.10
 
 ### web container
 

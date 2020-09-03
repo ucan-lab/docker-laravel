@@ -8,32 +8,36 @@ on:
 jobs:
   docker-build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
+
       - name: Docker Compose Version
         run: docker-compose --version
+
       - name: Build Docker
-        run: |
-          cd infrastructure
-          docker-compose build
-          docker-compose up -d
-          docker-compose ps
+        run: docker-compose up -d --build
+
+      - name: PHP Version
+        run: docker-compose exec -T app php --version
+
+      - name: Composer Version
+        run: docker-compose exec -T app composer --version
+
       - name: Create Laravel Project
-        run: |
-          cd infrastructure
-          docker-compose exec -T app php --version
-          docker-compose exec -T app composer --version
-          docker-compose exec -T app composer create-project --prefer-dist laravel/laravel .
-      - name: PHP and Laravel Version
-        run: |
-          cd infrastructure
-          docker-compose exec -T app php artisan --version
-      - name: Laravel Migrate, Rollback, Seeding Testing
-        run: |
-          cd infrastructure
-          docker-compose exec -T app php artisan migrate
-          docker-compose exec -T app php artisan migrate:refresh --seed
-      - name: Laravel Testing
-        run: |
-          cd infrastructure
-          docker-compose exec -T app php artisan test
+        run: docker-compose exec -T app composer create-project --prefer-dist laravel/laravel .
+
+      - name: Laravel Version
+        run: docker-compose exec -T app php artisan --version
+
+      - name: Laravel Migrate Testing
+        run: docker-compose exec -T app php artisan migrate
+
+      - name: Laravel Rollback Testing
+        run: docker-compose exec -T app php artisan migrate:refresh --seed
+
+      - name: Laravel Seeding Testing
+        run: docker-compose exec -T app php artisan db:seed
+
+      - name: Laravel PHPUnit Testing
+        run: docker-compose exec -T app php artisan test

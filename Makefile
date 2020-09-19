@@ -4,7 +4,6 @@ build:
 	docker-compose build --no-cache --force-rm
 laravel-install:
 	docker-compose exec app composer create-project --prefer-dist laravel/laravel .
-	docker-compose exec app chmod -R 777 storage bootstrap/cache
 create-project:
 	@make build
 	@make up

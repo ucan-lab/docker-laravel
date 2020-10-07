@@ -6,8 +6,9 @@ laravel-install:
 	docker-compose exec app composer create-project --prefer-dist laravel/laravel .
 create-project:
 	@make build
-	@make up
 	@make laravel-install
+	@make up
+	@make composer-install
 install-recommend-packages:
 	docker-compose exec app composer require doctrine/dbal
 	docker-compose exec app composer require --dev barryvdh/laravel-ide-helper
@@ -29,12 +30,12 @@ remake:
 stop:
 	docker-compose stop
 down:
-	docker-compose down
+	docker-compose down --remove-orphans
 restart:
 	@make down
 	@make up
 destroy:
-	docker-compose down --rmi all --volumes
+	docker-compose down --rmi all --volumes --remove-orphans
 destroy-volumes:
 	docker-compose down --volumes
 ps:
@@ -69,6 +70,8 @@ cache:
 	@make optimize
 cache-clear:
 	@make optimize-clear
+composer-install:
+	docker-compose exec app composer install
 npm:
 	@make npm-install
 npm-install:
@@ -104,3 +107,10 @@ ide-helper:
 	docker-compose exec app php artisan ide-helper:generate
 	docker-compose exec app php artisan ide-helper:meta
 	docker-compose exec app php artisan ide-helper:models --nowrite
+# docker-compose.mac.yml
+composer-install-for-mac:
+	docker-compose run --rm -v $$(pwd)/backend:/code -w /code app composer install
+npm-install-for-mac:
+	docker-compose run --rm -v $$(pwd)/backend:/code -w /code web npm install
+yarn-install-for-mac:
+	docker-compose run --rm -v $$(pwd)/backend:/code -w /code web yarn

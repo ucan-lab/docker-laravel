@@ -16,16 +16,19 @@ jobs:
         run: docker-compose --version
 
       - name: Build Docker
-        run: docker-compose up -d --build
+        run: docker-compose build
+
+      - name: Start Docker
+        run: docker-compose up -d
+
+      - name: Create Laravel Project
+        run: docker-compose exec -T app composer create-project --prefer-dist laravel/laravel .
 
       - name: PHP Version
         run: docker-compose exec -T app php --version
 
       - name: Composer Version
         run: docker-compose exec -T app composer --version
-
-      - name: Create Laravel Project
-        run: docker-compose exec -T app composer create-project --prefer-dist laravel/laravel .
 
       - name: Laravel Version
         run: docker-compose exec -T app php artisan --version

@@ -4,13 +4,17 @@ volumes:
   db-store:
 services:
   app:
-    build: ./infra/docker/php
+    build:
+      context: .
+      dockerfile: ./infra/docker/php/Dockerfile
     volumes:
       - php-fpm-socket:/var/run/php-fpm
       - ./backend:/work/backend
 
   web:
-    build: ./infra/docker/nginx
+    build:
+      context: .
+      dockerfile: ./infra/docker/nginx/Dockerfile
     ports:
       - 80:80
     volumes:
@@ -18,7 +22,9 @@ services:
       - ./backend:/work/backend
 
   db:
-    build: ./infra/docker/mysql
+    build:
+      context: .
+      dockerfile: ./infra/docker/mysql/Dockerfile
     ports:
       - 3306:3306
     volumes:

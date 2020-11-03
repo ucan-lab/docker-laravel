@@ -7,4 +7,4 @@ ENV TZ=UTC \
   MYSQL_PASSWORD=secret \
   MYSQL_ROOT_PASSWORD=secret
 
-COPY ./my.cnf /etc/my.cnf
+COPY ./infra/docker/mysql/my.cnf /etc/my.cnf

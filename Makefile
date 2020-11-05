@@ -8,6 +8,7 @@ create-project:
 	@make build
 	@make up
 	@make laravel-install
+	@make fresh
 install-recommend-packages:
 	docker-compose exec app composer require doctrine/dbal
 	docker-compose exec app composer require --dev barryvdh/laravel-ide-helper
@@ -22,7 +23,7 @@ init:
 	docker-compose exec app cp .env.example .env
 	docker-compose exec app php artisan key:generate
 	docker-compose exec app php artisan storage:link
-	docker-compose exec app php artisan migrate:fresh --seed
+	@make fresh
 remake:
 	@make destroy
 	@make init
@@ -43,6 +44,18 @@ logs:
 	docker-compose logs
 logs-watch:
 	docker-compose logs --follow
+log-web:
+	docker-compose logs web
+log-web-watch:
+	docker-compose logs --follow web
+log-app:
+	docker-compose logs app
+log-app-watch:
+	docker-compose logs --follow app
+log-db:
+	docker-compose logs db
+log-db-watch:
+	docker-compose logs --follow db
 web:
 	docker-compose exec web ash
 app:
@@ -67,8 +80,12 @@ optimize-clear:
 cache:
 	docker-compose exec app composer dump-autoload -o
 	@make optimize
+	docker-compose exec app php artisan event:cache
+	docker-compose exec app php artisan view:cache
 cache-clear:
+	docker-compose exec app composer clear-cache
 	@make optimize-clear
+	docker-compose exec app php artisan event:clear
 npm:
 	@make npm-install
 npm-install:

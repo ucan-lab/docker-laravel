@@ -12,7 +12,7 @@ create-project:
 	docker-compose exec app php artisan storage:link
 	@make fresh
 install-recommend-packages:
-	docker-compose exec app composer require doctrine/dbal
+	docker-compose exec app composer require doctrine/dbal "^2"
 	docker-compose exec app composer require --dev barryvdh/laravel-ide-helper
 	docker-compose exec app composer require --dev beyondcode/laravel-dump-server
 	docker-compose exec app composer require --dev barryvdh/laravel-debugbar

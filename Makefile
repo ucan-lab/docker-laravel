@@ -10,6 +10,7 @@ create-project:
 	@make laravel-install
 	docker-compose exec app php artisan key:generate
 	docker-compose exec app php artisan storage:link
+	docker-compose exec app chmod -R 777 storage bootstrap/cache
 	@make fresh
 install-recommend-packages:
 	docker-compose exec app composer require doctrine/dbal "^2"
@@ -25,6 +26,7 @@ init:
 	docker-compose exec app cp .env.example .env
 	docker-compose exec app php artisan key:generate
 	docker-compose exec app php artisan storage:link
+	docker-compose exec app chmod -R 777 storage bootstrap/cache
 	@make fresh
 remake:
 	@make destroy

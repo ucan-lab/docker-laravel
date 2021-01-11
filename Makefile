@@ -14,6 +14,7 @@ create-project:
 	@make fresh
 install-recommend-packages:
 	docker-compose exec app composer require doctrine/dbal "^2"
+	docker-compose exec app composer require --dev ucan-lab/laravel-dacapo
 	docker-compose exec app composer require --dev barryvdh/laravel-ide-helper
 	docker-compose exec app composer require --dev beyondcode/laravel-dump-server
 	docker-compose exec app composer require --dev barryvdh/laravel-debugbar
@@ -70,6 +71,8 @@ fresh:
 	docker-compose exec app php artisan migrate:fresh --seed
 seed:
 	docker-compose exec app php artisan db:seed
+dacapo:
+	docker-compose exec app php artisan dacapo
 rollback-test:
 	docker-compose exec app php artisan migrate:fresh
 	docker-compose exec app php artisan migrate:refresh

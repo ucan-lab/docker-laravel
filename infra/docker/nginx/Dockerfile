@@ -15,6 +15,6 @@ COPY --from=node /usr/local/lib /usr/local/lib
 # yarn command
 COPY --from=node /opt /opt
 # nginx config file
-COPY ./infra/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./infra/docker/nginx/*.conf /etc/nginx/conf.d/
 
 WORKDIR /work/backend

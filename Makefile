@@ -68,7 +68,7 @@ app:
 migrate:
 	docker-compose exec -T app php artisan migrate
 fresh:
-	docker-compose exec -T app php artisan migrate:fresh --seed
+	docker-compose exec app php artisan migrate:fresh --seed
 seed:
 	docker-compose exec -T app php artisan db:seed
 dacapo:

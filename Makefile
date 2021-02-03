@@ -3,7 +3,7 @@ up:
 build:
 	docker-compose build --no-cache --force-rm
 laravel-install:
-	docker-compose exec app composer create-project --prefer-dist laravel/laravel .
+	docker-compose exec -T app composer create-project --prefer-dist laravel/laravel .
 create-project:
 	@make build
 	@make up

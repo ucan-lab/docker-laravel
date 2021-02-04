@@ -12,6 +12,7 @@ create-project:
 	docker-compose exec -T app php artisan storage:link
 	docker-compose exec -T app chmod -R 777 storage bootstrap/cache
 	@make migrate
+	@make seed
 install-recommend-packages:
 	docker-compose exec -T app composer require doctrine/dbal "^2"
 	docker-compose exec -T app composer require --dev ucan-lab/laravel-dacapo

@@ -10,7 +10,7 @@ services:
     #user: "${UID}:${GID}"
     volumes:
       - php-fpm-socket:/var/run/php-fpm
-      - ./backend:/work/backend
+    #  - ./backend:/work/backend
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=db
@@ -28,7 +28,7 @@ services:
     #  - ${WEB_PORT:-80}:80
     volumes:
       - php-fpm-socket:/var/run/php-fpm
-      - ./backend:/work/backend
+    #  - ./backend:/work/backend
 
   db:
     build:

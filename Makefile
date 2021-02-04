@@ -11,7 +11,7 @@ create-project:
 	docker-compose exec -T app php artisan key:generate
 	docker-compose exec -T app php artisan storage:link
 	docker-compose exec -T app chmod -R 777 storage bootstrap/cache
-	@make fresh
+	@make migrate
 install-recommend-packages:
 	docker-compose exec -T app composer require doctrine/dbal "^2"
 	docker-compose exec -T app composer require --dev ucan-lab/laravel-dacapo
@@ -68,7 +68,7 @@ app:
 migrate:
 	docker-compose exec -T app php artisan migrate
 fresh:
-	docker-compose exec app php artisan migrate:fresh --seed
+	docker-compose exec -T app php artisan migrate:fresh --seed
 seed:
 	docker-compose exec -T app php artisan db:seed
 dacapo:

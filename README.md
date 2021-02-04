@@ -9,7 +9,7 @@
 
 Build a simple laravel development environment with docker-compose.
 
-## Usage
+## Usage  
 
 ```bash
 $ git clone git@github.com:ucan-lab/docker-laravel.git

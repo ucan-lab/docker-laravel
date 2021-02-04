@@ -2,11 +2,11 @@ pipeline {
 	agent any 
  	stages {
 
- 		stage('Cloning Git') {
+ 		/*stage('Cloning Git') {
  			steps {
  				git 'https://github.com/kimkaid/docker-laravel.git'
  			}
- 		}
+ 		}*/
  		
 		stage('Build') {
 	    	steps {

@@ -11,8 +11,7 @@ pipeline {
 		stage('Build') {
 	    	steps {
 	    	    sh 'export COMPOSE_INTERACTIVE_NO_CLI=1'
-		    sh 'cat docker-compose.yml'	
-	    	    /* sh 'docker-compose build --force-rm'
+	    	    sh 'docker-compose build --force-rm'
 	    	    sh 'docker-compose up -d'
 	    	    sh 'docker-compose exec -T app composer create-project --prefer-dist laravel/laravel .'
 	    	    sh 'docker-compose exec -T app php artisan key:generate'
@@ -20,7 +19,7 @@ pipeline {
 	    	    sh 'docker-compose exec -T app chmod -R 777 storage bootstrap/cache'
 	    	    sh 'docker-compose exec -T app php artisan migrate'
 	    	    sh 'docker-compose exec -T app php artisan db:seed'
-	    	    sh 'docker-compose exec -T app php artisan test'*/
+	    	    sh 'docker-compose exec -T app php artisan test'
 	    	}
 	 	}
  	}

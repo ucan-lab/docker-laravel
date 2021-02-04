@@ -7,7 +7,6 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/php/Dockerfile
-    #user: "${UID}:${GID}"
     volumes:
       - php-fpm-socket:/var/run/php-fpm
     #  - ./backend:/work/backend
@@ -23,8 +22,7 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/nginx/Dockerfile
-    #user: "${UID}:${GID}"  
-    #ports:
+    ports:
     #  - ${WEB_PORT:-80}:80
     volumes:
       - php-fpm-socket:/var/run/php-fpm
@@ -34,7 +32,7 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/mysql/Dockerfile
-    #ports:
+    ports:
     #  - ${DB_PORT:-3306}:3306
     #volumes:
     #  - db-store:/var/lib/mysql

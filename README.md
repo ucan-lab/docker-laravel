@@ -44,7 +44,7 @@ Read this [Wiki](https://github.com/ucan-lab/docker-laravel/wiki).
 
 - Base image
   - [nginx](https://hub.docker.com/_/nginx):1.18-alpine
-  - [node](https://hub.docker.com/_/node):14.2-alpine
+  - [node](https://hub.docker.com/_/node):16-alpine
 
 ### db container
 

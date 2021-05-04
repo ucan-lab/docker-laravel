@@ -8,8 +8,14 @@ services:
       context: .
       dockerfile: ./infra/docker/php/Dockerfile
     volumes:
-      - php-fpm-socket:/var/run/php-fpm
-      - ./backend:/work/backend
+      - type: volume
+        source: php-fpm-socket
+        target: /var/run/php-fpm
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./backend
+        target: /work/backend
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=db
@@ -23,19 +29,35 @@ services:
       context: .
       dockerfile: ./infra/docker/nginx/Dockerfile
     ports:
-      - ${WEB_PORT:-80}:80
+      - target: 80
+        published: ${WEB_PORT:-80}
+        protocol: tcp
+        mode: host
     volumes:
-      - php-fpm-socket:/var/run/php-fpm
-      - ./backend:/work/backend
+      - type: volume
+        source: php-fpm-socket
+        target: /var/run/php-fpm
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./backend
+        target: /work/backend
 
   db:
     build:
       context: .
       dockerfile: ./infra/docker/mysql/Dockerfile
     ports:
-      - ${DB_PORT:-3306}:3306
+      - target: 3306
+        published: ${DB_PORT:-3306}
+        protocol: tcp
+        mode: host
     volumes:
-      - db-store:/var/lib/mysql
+      - type: volume
+        source: db-store
+        target: /var/lib/mysql
+        volume:
+          nocopy: true
     environment:
       - MYSQL_DATABASE=${DB_NAME:-laravel_local}
       - MYSQL_USER=${DB_USER:-phper}

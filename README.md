@@ -43,7 +43,7 @@ Read this [Wiki](https://github.com/ucan-lab/docker-laravel/wiki).
 ### web container
 
 - Base image
-  - [nginx](https://hub.docker.com/_/nginx):1.18-alpine
+  - [nginx](https://hub.docker.com/_/nginx):1.20-alpine
   - [node](https://hub.docker.com/_/node):16-alpine
 
 ### db container

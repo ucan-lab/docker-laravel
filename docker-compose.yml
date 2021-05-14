@@ -2,6 +2,7 @@ version: "3.9"
 volumes:
   php-fpm-socket:
   db-store:
+  psysh-store:
 services:
   app:
     build:
@@ -16,6 +17,11 @@ services:
       - type: bind
         source: ./backend
         target: /work/backend
+      - type: volume
+        source: psysh-store
+        target: /root/.config/psysh
+        volume:
+          nocopy: true
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=db

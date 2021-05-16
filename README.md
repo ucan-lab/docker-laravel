@@ -15,18 +15,17 @@ Build a simple laravel development environment with docker-compose.
 $ git clone git@github.com:ucan-lab/docker-laravel.git
 $ cd docker-laravel
 $ make create-project # Install the latest Laravel project
-$ make install-recommend-packages # Not required
+$ make install-recommend-packages # Optional
 ```
 
 http://localhost
 
-Read this [Makefile](https://github.com/ucan-lab/docker-laravel/blob/master/Makefile).
-
 ## Tips
 
-Read this [Wiki](https://github.com/ucan-lab/docker-laravel/wiki).
+- Read this [Makefile](https://github.com/ucan-lab/docker-laravel/blob/main/Makefile).
+- Read this [Wiki](https://github.com/ucan-lab/docker-laravel/wiki).
 
-## Container structure
+## Container structures
 
 ```bash
 ├── app
@@ -49,13 +48,4 @@ Read this [Wiki](https://github.com/ucan-lab/docker-laravel/wiki).
 ### db container
 
 - Base image
-  - [mysql](https://hub.docker.com/_/mysql):8.0
-
-#### Persistent MySQL Storage
-
-By default, the [named volume](https://docs.docker.com/compose/compose-file/#volumes) is mounted, so MySQL data remains even if the container is destroyed.
-If you want to delete MySQL data intentionally, execute the following command.
-
-```bash
-$ docker-compose down -v && docker-compose up
-```
+  - [mysql/mysql-server](https://hub.docker.com/r/mysql/mysql-server):8.0

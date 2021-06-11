@@ -12,13 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Docker Compose Version
-        run: docker-compose --version
+      - name: Docker Version
+        run: docker version
 
-      - name: Build Docker
+      - name: Build Docker Images
+        run: docker-compose build
+
+      - name: Create & Start Docker Containers
         run: |
           mkdir backend
-          docker-compose up -d --build
+          docker-compose up -d
 
       - name: PHP Version
         run: docker-compose exec -T app php --version

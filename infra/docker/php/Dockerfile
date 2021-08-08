@@ -28,4 +28,16 @@ RUN apt-get update && \
 COPY ./infra/docker/php/php-fpm.d/zzz-www.conf /usr/local/etc/php-fpm.d/zzz-www.conf
 COPY ./infra/docker/php/php.ini /usr/local/etc/php/php.ini
 
+# create working user
+ARG USER_ID
+ARG GROUP_ID
+ARG USER_NAME=www-data
+
+RUN groupmod -g ${GROUP_ID} ${USER_NAME} && \
+    usermod -u ${USER_ID} -G ${USER_NAME},root ${USER_NAME}
+
+# set ownership of composer to user
+RUN chown ${USER_NAME}:${USER_NAME} /usr/bin/composer
+RUN chown ${USER_NAME}:${USER_NAME} -R ${COMPOSER_HOME}
+
 WORKDIR /work/backend

@@ -8,6 +8,9 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/php/Dockerfile
+      args:
+        - USER_ID=${USER_ID:-1000}
+        - GROUP_ID=${GROUP_ID:-1000}
     volumes:
       - type: volume
         source: php-fpm-socket

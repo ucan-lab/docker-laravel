@@ -3,7 +3,8 @@ up:
 build:
 	docker compose build --no-cache --force-rm
 laravel-install:
-	docker compose exec app composer create-project --prefer-dist laravel/laravel .
+	docker compose exec app chown -R www-data:www-data .
+	docker compose exec --user www-data app composer create-project --prefer-dist laravel/laravel .
 create-project:
 	mkdir -p backend
 	@make build

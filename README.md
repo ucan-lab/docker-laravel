@@ -36,7 +36,7 @@ http://localhost
 ### app container
 
 - Base image
-  - [php](https://hub.docker.com/_/php):8.0-fpm-buster
+  - [php](https://hub.docker.com/_/php):8.0-fpm-bullseye
   - [composer](https://hub.docker.com/_/composer):2.1
 
 ### web container

@@ -2,6 +2,8 @@ FROM php:8.1-fpm-bullseye
 LABEL maintainer="ucan-lab <yes@u-can.pro>"
 SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 
+WORKDIR /data
+
 # timezone environment
 ENV TZ=UTC \
   # locale
@@ -27,5 +29,3 @@ RUN apt-get update && \
 
 COPY ./infra/docker/php/php-fpm.d/zzz-www.conf /usr/local/etc/php-fpm.d/zzz-www.conf
 COPY ./infra/docker/php/php.ini /usr/local/etc/php/php.ini
-
-WORKDIR /work/backend

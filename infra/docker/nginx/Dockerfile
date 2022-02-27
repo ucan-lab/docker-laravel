@@ -3,6 +3,8 @@ FROM nginx:1.20-alpine
 LABEL maintainer="ucan-lab <yes@u-can.pro>"
 SHELL ["/bin/ash", "-oeux", "pipefail", "-c"]
 
+WORKDIR /data
+
 ENV TZ=UTC
 
 RUN apk update && \
@@ -16,5 +18,3 @@ COPY --from=node /usr/local/lib /usr/local/lib
 COPY --from=node /opt /opt
 # nginx config file
 COPY ./infra/docker/nginx/*.conf /etc/nginx/conf.d/
-
-WORKDIR /work/backend

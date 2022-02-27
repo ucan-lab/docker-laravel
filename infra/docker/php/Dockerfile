@@ -1,5 +1,4 @@
 FROM php:8.1-fpm-bullseye
-LABEL maintainer="ucan-lab <yes@u-can.pro>"
 SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 
 WORKDIR /data

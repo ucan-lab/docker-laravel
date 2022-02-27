@@ -1,6 +1,5 @@
 version: "3.9"
 volumes:
-  php-fpm-socket:
   db-store:
   psysh-store:
 services:

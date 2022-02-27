@@ -9,11 +9,6 @@ services:
       context: .
       dockerfile: ./infra/docker/php/Dockerfile
     volumes:
-      - type: volume
-        source: php-fpm-socket
-        target: /var/run/php-fpm
-        volume:
-          nocopy: true
       - type: bind
         source: ./src
         target: /data
@@ -40,11 +35,6 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      - type: volume
-        source: php-fpm-socket
-        target: /var/run/php-fpm
-        volume:
-          nocopy: true
       - type: bind
         source: ./src
         target: /data

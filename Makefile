@@ -37,13 +37,13 @@ stop:
 	docker compose stop
 down:
 	docker compose down --remove-orphans
+down-v:
+	docker compose down --remove-orphans --volumes
 restart:
 	@make down
 	@make up
 destroy:
 	docker compose down --rmi all --volumes --remove-orphans
-destroy-volumes:
-	docker compose down --volumes --remove-orphans
 ps:
 	docker compose ps
 logs:

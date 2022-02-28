@@ -1,5 +1,5 @@
-FROM nginx:1.20-alpine
-SHELL ["/bin/ash", "-oeux", "pipefail", "-c"]
+FROM nginx:1.20
+SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 
 WORKDIR /data
 

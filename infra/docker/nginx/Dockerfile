@@ -1,5 +1,4 @@
 FROM nginx:1.20
-SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 
 WORKDIR /data
 

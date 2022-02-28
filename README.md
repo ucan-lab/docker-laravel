@@ -48,7 +48,7 @@ http://localhost
 ### web container
 
 - Base image
-  - [nginx](https://hub.docker.com/_/nginx):1.20-alpine
+  - [nginx](https://hub.docker.com/_/nginx):1.20
 
 ### db container
 

@@ -5,7 +5,7 @@ build:
 laravel-install:
 	docker compose exec app composer create-project --prefer-dist laravel/laravel .
 create-project:
-	mkdir -p backend
+	mkdir -p src
 	@make build
 	@make up
 	@make laravel-install
@@ -37,13 +37,13 @@ stop:
 	docker compose stop
 down:
 	docker compose down --remove-orphans
+down-v:
+	docker compose down --remove-orphans --volumes
 restart:
 	@make down
 	@make up
 destroy:
 	docker compose down --rmi all --volumes --remove-orphans
-destroy-volumes:
-	docker compose down --volumes --remove-orphans
 ps:
 	docker compose ps
 logs:
@@ -63,7 +63,7 @@ log-db:
 log-db-watch:
 	docker compose logs --follow db
 web:
-	docker compose exec web ash
+	docker compose exec web bash
 app:
 	docker compose exec app bash
 migrate:
@@ -94,30 +94,6 @@ cache-clear:
 	docker compose exec app composer clear-cache
 	@make optimize-clear
 	docker compose exec app php artisan event:clear
-npm:
-	@make npm-install
-npm-install:
-	docker compose exec web npm install
-npm-dev:
-	docker compose exec web npm run dev
-npm-watch:
-	docker compose exec web npm run watch
-npm-watch-poll:
-	docker compose exec web npm run watch-poll
-npm-hot:
-	docker compose exec web npm run hot
-yarn:
-	docker compose exec web yarn
-yarn-install:
-	@make yarn
-yarn-dev:
-	docker compose exec web yarn dev
-yarn-watch:
-	docker compose exec web yarn watch
-yarn-watch-poll:
-	docker compose exec web yarn watch-poll
-yarn-hot:
-	docker compose exec web yarn hot
 db:
 	docker compose exec db bash
 sql:

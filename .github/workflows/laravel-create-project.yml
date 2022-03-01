@@ -20,7 +20,7 @@ jobs:
 
       - name: Create & Start Docker Containers
         run: |
-          mkdir backend
+          mkdir src
           docker-compose up -d
 
       - name: OS Version

@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/php/Dockerfile
-      target: development
+      target: ${APP_BUILD_TARGET:-development}
     volumes:
       - type: bind
         source: ./src
@@ -18,12 +18,18 @@ services:
         volume:
           nocopy: true
     environment:
-      - DB_CONNECTION=mysql
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_DATABASE=laravel
-      - DB_USERNAME=phper
-      - DB_PASSWORD=secret
+      - APP_DEBUG=${APP_DEBUG:-true}
+      - APP_KEY=${APP_KEY:-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
+      - APP_ENV=${APP_ENV:-local}
+      - APP_URL=${APP_URL:-http://localhost}
+      - LOG_CHANNEL=${LOG_CHANNEL:-stderr}
+      - LOG_STDERR_FORMATTER=${LOG_STDERR_FORMATTER:-Monolog\Formatter\JsonFormatter}
+      - DB_CONNECTION=${DB_CONNECTION:-mysql}
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_DATABASE=${DB_DATABASE:-laravel}
+      - DB_USERNAME=${DB_USERNAME:-phper}
+      - DB_PASSWORD=${DB_PASSWORD:-secret}
 
   web:
     build:
@@ -31,7 +37,7 @@ services:
       dockerfile: ./infra/docker/nginx/Dockerfile
     ports:
       - target: 80
-        published: 80
+        published: ${WEB_PUBLISHED_PORT:-80}
         protocol: tcp
         mode: host
     volumes:
@@ -45,7 +51,7 @@ services:
       dockerfile: ./infra/docker/mysql/Dockerfile
     ports:
       - target: 3306
-        published: 3306
+        published: ${DB_PUBLISHED_PORT:-3306}
         protocol: tcp
         mode: host
     volumes:
@@ -55,7 +61,7 @@ services:
         volume:
           nocopy: true
     environment:
-      - MYSQL_DATABASE=laravel
-      - MYSQL_USER=phper
-      - MYSQL_PASSWORD=secret
-      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=${DB_DATABASE:-laravel}
+      - MYSQL_USER=${DB_USERNAME:-phper}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}

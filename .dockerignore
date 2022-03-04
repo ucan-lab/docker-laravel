@@ -9,10 +9,6 @@
 /src/storage/logs/*
 /src/storage/*.key
 /src/vendor
-/src/.editorconfig
-/src/*.env*
-/src/**.gitattributes
-/src/**.gitignore
 /src/.styleci.yml
 /src/.phpunit.result.cache
 /src/.php-cs-fixer.cache
@@ -22,3 +18,11 @@
 /src/phpspec.yml
 /src/npm-debug.log
 /src/yarn-error.log
+/.github
+/.git
+/.idea
+/.vscode
+**.env*
+**.editorconfig
+**.gitattributes
+**.gitignore

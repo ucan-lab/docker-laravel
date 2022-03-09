@@ -19,41 +19,41 @@ jobs:
         run: docker version
 
       - name: Build Docker Images
-        run: docker-compose build
+        run: docker compose build
 
       - name: Create & Start Docker Containers
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: OS Version
         run: |
-          docker-compose exec -T app cat /etc/os-release
-          docker-compose exec -T app cat /etc/debian_version
+          docker compose exec -T app cat /etc/os-release
+          docker compose exec -T app cat /etc/debian_version
 
       - name: PHP Version
-        run: docker-compose exec -T app php --version
+        run: docker compose exec -T app php --version
 
       - name: Composer Version
-        run: docker-compose exec -T app composer --version
+        run: docker compose exec -T app composer --version
 
       - name: Composer Install
-        run: docker-compose exec -T app composer install
+        run: docker compose exec -T app composer install
 
       - name: Laravel Version
-        run: docker-compose exec -T app php artisan --version
+        run: docker compose exec -T app php artisan --version
 
       - name: Laravel Settings
         run: |
-          docker-compose exec -T app cp .env.example .env
-          docker-compose exec -T app php artisan key:generate
+          docker compose exec -T app cp .env.example .env
+          docker compose exec -T app php artisan key:generate
 
       - name: Laravel Migrate Testing
-        run: docker-compose exec -T app php artisan migrate
+        run: docker compose exec -T app php artisan migrate
 
       - name: Laravel Rollback Testing
-        run: docker-compose exec -T app php artisan migrate:refresh
+        run: docker compose exec -T app php artisan migrate:refresh
 
       - name: Laravel Seeding Testing
-        run: docker-compose exec -T app php artisan db:seed
+        run: docker compose exec -T app php artisan db:seed
 
       - name: Laravel PHPUnit Testing
-        run: docker-compose exec -T app php artisan test
+        run: docker compose exec -T app php artisan test

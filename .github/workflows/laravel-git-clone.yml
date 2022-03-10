@@ -18,6 +18,9 @@ jobs:
       - name: Docker Version
         run: docker version
 
+      - name: Docker Compose Settings
+        run: echo APP_BUILD_TARGET=development-xdebug > .env
+
       - name: Build Docker Images
         run: docker compose build
 

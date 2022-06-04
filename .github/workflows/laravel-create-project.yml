@@ -25,33 +25,33 @@ jobs:
 
       - name: OS Version
         run: |
-          docker compose exec -T app cat /etc/os-release
-          docker compose exec -T app cat /etc/debian_version
+          docker compose exec app cat /etc/os-release
+          docker compose exec app cat /etc/debian_version
 
       - name: PHP Version
-        run: docker compose exec -T app php --version
+        run: docker compose exec app php --version
 
       - name: Composer Version
-        run: docker compose exec -T app composer --version
+        run: docker compose exec app composer --version
 
       - name: Create Laravel Project
-        run: docker compose exec -T app composer create-project --prefer-dist laravel/laravel .
+        run: docker compose exec app composer create-project --prefer-dist laravel/laravel .
 
       - name: Laravel Version
-        run: docker compose exec -T app php artisan --version
+        run: docker compose exec app php artisan --version
 
       - name: Wait for the MySQL container to start
         run: sleep 5s
         shell: bash
 
       - name: Laravel Migrate Testing
-        run: docker compose exec -T app php artisan migrate
+        run: docker compose exec app php artisan migrate
 
       - name: Laravel Rollback Testing
-        run: docker compose exec -T app php artisan migrate:refresh
+        run: docker compose exec app php artisan migrate:refresh
 
       - name: Laravel Seeding Testing
-        run: docker compose exec -T app php artisan db:seed
+        run: docker compose exec app php artisan db:seed
 
       - name: Laravel PHPUnit Testing
-        run: docker compose exec -T app php artisan test
+        run: docker compose exec app php artisan test

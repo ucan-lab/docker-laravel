@@ -46,6 +46,10 @@ jobs:
           docker compose exec -T app cp .env.example .env
           docker compose exec -T app php artisan key:generate
 
+      - name: Wait for the MySQL container to start
+        run: sleep 5s
+        shell: bash
+
       - name: Laravel Migrate Testing
         run: docker compose exec -T app php artisan migrate
 

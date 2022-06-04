@@ -40,6 +40,10 @@ jobs:
       - name: Laravel Version
         run: docker compose exec -T app php artisan --version
 
+      - name: Wait for the MySQL container to start
+        run: sleep 5s
+        shell: bash
+
       - name: Laravel Migrate Testing
         run: docker compose exec -T app php artisan migrate
 

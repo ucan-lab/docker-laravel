@@ -18,7 +18,7 @@ jobs:
       - name: Docker Version
         run: docker version
 
-      - name: Settings
+      - name: Docker Compose Settings
         run: echo APP_BUILD_TARGET=deploy > .env
 
       - name: Build Docker Images

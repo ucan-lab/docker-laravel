@@ -59,3 +59,8 @@ http://localhost
 
 - Base image
   - [mailhog/mailhog](https://hub.docker.com/r/mailhog/mailhog)
+
+
+### Infrastructure model
+
+![Insfrastructure model](.infragenie/infrastructure_model.png)

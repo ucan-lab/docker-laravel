@@ -11,7 +11,7 @@ services:
     volumes:
       - type: bind
         source: ./src
-        target: /data
+        target: /workspace
       - type: volume
         source: psysh-store
         target: /root/.config/psysh
@@ -43,7 +43,7 @@ services:
     volumes:
       - type: bind
         source: ./src
-        target: /data
+        target: /workspace
 
   db:
     build:

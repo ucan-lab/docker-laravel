@@ -1,6 +1,6 @@
 FROM nginx:1.22
 
-WORKDIR /data
+WORKDIR /workspace
 
 ENV TZ=UTC
 

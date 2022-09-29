@@ -1,35 +1,16 @@
-up:
-	docker compose up -d
-build:
-	docker compose build
-laravel-install:
-	docker compose exec app composer create-project --prefer-dist laravel/laravel .
-create-project:
-	mkdir -p src
+install:
 	@make build
 	@make up
-	@make laravel-install
-	docker compose exec app php artisan key:generate
-	docker compose exec app php artisan storage:link
-	docker compose exec app chmod -R 777 storage bootstrap/cache
-	@make fresh
-install-recommend-packages:
-	docker compose exec app composer require doctrine/dbal
-	docker compose exec app composer require --dev ucan-lab/laravel-dacapo
-	docker compose exec app composer require --dev barryvdh/laravel-ide-helper
-	docker compose exec app composer require --dev beyondcode/laravel-dump-server
-	docker compose exec app composer require --dev barryvdh/laravel-debugbar
-	docker compose exec app composer require --dev roave/security-advisories:dev-master
-	docker compose exec app php artisan vendor:publish --provider="BeyondCode\DumpServer\DumpServerServiceProvider"
-	docker compose exec app php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
-init:
-	docker compose up -d --build
 	docker compose exec app composer install
 	docker compose exec app cp .env.example .env
 	docker compose exec app php artisan key:generate
 	docker compose exec app php artisan storage:link
 	docker compose exec app chmod -R 777 storage bootstrap/cache
 	@make fresh
+up:
+	docker compose up -d
+build:
+	docker compose build
 remake:
 	@make destroy
 	@make init

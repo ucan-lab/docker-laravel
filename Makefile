@@ -13,7 +13,7 @@ build:
 	docker compose build
 remake:
 	@make destroy
-	@make init
+	@make install
 stop:
 	docker compose stop
 down:

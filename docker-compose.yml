@@ -2,6 +2,7 @@ version: "3.9"
 volumes:
   db-store:
   psysh-store:
+  meili-store:
 services:
   app:
     build:
@@ -30,7 +31,9 @@ services:
       - DB_DATABASE=${DB_DATABASE:-laravel}
       - DB_USERNAME=${DB_USERNAME:-phper}
       - DB_PASSWORD=${DB_PASSWORD:-secret}
-
+      - SCOUT_DRIVER=${SCOUT_DRIVER:-meilisearch}
+      - MEILISEARCH_HOST=${MEILISEARCH_HOST:-http://meilisearch:7700}
+      - MEILISEARCH_KEY=${MEILISEARCH_KEY:-MY_API_KEY}
   web:
     build:
       context: .
@@ -73,3 +76,19 @@ services:
         published: ${MAILHOG_PUBLISHED_PORT:-8025}
         protocol: tcp
         mode: host
+        
+  meilisearch:
+    image: getmeili/meilisearch:v0.29
+    ports:
+      - target: 7700
+        published: ${MEILISEARCH_PUBLISHED_PORT:-7700}
+        protocol: tcp
+        mode: host
+    environment:
+      - MEILI_MASTER_KEY=MY_API_KEY
+    volumes:
+      - type: volume
+        source: meili-store
+        target: /var/lib/data.ms
+        volume:
+          nocopy: true

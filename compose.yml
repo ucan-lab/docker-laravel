@@ -1,6 +1,11 @@
 volumes:
   db-store:
   psysh-store:
+
+configs:
+  db-config:
+    file: ./infra/docker/mysql/my.cnf
+
 services:
   app:
     build:
@@ -52,6 +57,9 @@ services:
         published: ${DB_PUBLISHED_PORT:-3306}
         protocol: tcp
         mode: host
+    configs:
+      - source: db-config
+        target: /etc/my.cnf
     volumes:
       - type: volume
         source: db-store

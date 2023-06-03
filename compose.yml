@@ -72,10 +72,10 @@ services:
       - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
 
-  mailhog:
-    image: mailhog/mailhog
+  mailpit:
+    image: axllent/mailpit
     ports:
       - target: 8025
-        published: ${MAILHOG_PUBLISHED_PORT:-8025}
+        published: ${MAILPIT_PUBLISHED_PORT:-8025}
         protocol: tcp
         mode: host

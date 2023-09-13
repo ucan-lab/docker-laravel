@@ -22,6 +22,10 @@ Build a simple laravel development environment with docker-compose. Compatible w
 3. Execute the following command
 
 ```bash
+$ make create-project
+
+# or...
+
 $ mkdir -p src
 $ docker compose build
 $ docker compose up -d

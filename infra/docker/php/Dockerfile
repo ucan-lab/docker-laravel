@@ -22,8 +22,6 @@ RUN apt-get update \
     libzip-dev \
     libicu-dev \
     libonig-dev \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/* \
   && locale-gen en_US.UTF-8 \
   && localedef -f UTF-8 -i en_US en_US.UTF-8 \
   && docker-php-ext-install \
@@ -36,12 +34,17 @@ RUN apt-get update \
 
 FROM base AS development
 
+RUN apt-get -y install --no-install-recommends \
+    default-mysql-client \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
 COPY ./infra/docker/php/php.development.ini /usr/local/etc/php/php.ini
 
 FROM development AS development-xdebug
 
-RUN pecl install xdebug && \
-  docker-php-ext-enable xdebug
+RUN pecl install xdebug \
+  && docker-php-ext-enable xdebug
 
 COPY ./infra/docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
@@ -53,4 +56,6 @@ COPY ./src /workspace
 RUN composer install -q -n --no-ansi --no-dev --no-scripts --no-progress --prefer-dist \
   && chmod -R 777 storage bootstrap/cache \
   && php artisan optimize:clear \
-  && php artisan optimize
+  && php artisan optimize \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*

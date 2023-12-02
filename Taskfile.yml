@@ -1,0 +1,144 @@
+version: '3'
+
+tasks:
+  install:
+    cmds:
+      - docker compose build
+      - docker compose up -d
+      - docker compose exec app composer install
+      - docker compose exec app cp .env.example .env
+      - docker compose exec app php artisan key:generate
+      - docker compose exec app php artisan storage:link
+      - docker compose exec app chmod -R 777 storage bootstrap/cache
+
+  create-project:
+    cmds:
+      - mkdir -p src
+      - docker compose build
+      - docker compose up -d
+      - docker compose exec app composer create-project --prefer-dist laravel/laravel .
+      - docker compose exec app php artisan key:generate
+      - docker compose exec app php artisan storage:link
+      - docker compose exec app chmod -R 777 storage bootstrap/cache
+
+  build:
+    cmds:
+      - docker compose build
+
+  up:
+    cmds:
+      - docker compose up -d
+
+  down:
+    cmds:
+      - docker compose down --remove-orphans
+
+  down-v:
+    cmds:
+      - docker compose down --remove-orphans --volumes
+
+  stop:
+    cmds:
+      - docker compose stop
+
+  restart:
+    cmds:
+      - docker compose down --remove-orphans
+      - docker compose up -d
+
+  destroy:
+    cmds:
+      - docker compose down --rmi all --volumes --remove-orphans
+
+  remake:
+    cmds:
+      - docker compose down --rmi all --volumes --remove-orphans
+      - docker compose build
+      - docker compose up -d
+      - docker compose exec app composer install
+      - docker compose exec app cp .env.example .env
+      - docker compose exec app php artisan key:generate
+      - docker compose exec app php artisan storage:link
+      - docker compose exec app chmod -R 777 storage bootstrap/cache
+
+  ps:
+    cmds:
+      - docker compose ps
+
+  web:
+    cmds:
+      - docker compose exec web bash
+
+  app:
+    cmds:
+      - docker compose exec web bash
+
+  tinker:
+    cmds:
+      - docker compose exec app php artisan tinker
+
+  test:
+    cmds:
+      - docker compose exec app php artisan test
+
+  migrate:
+    cmds:
+      - docker compose exec app php artisan migrate
+
+  fresh:
+    cmds:
+      - docker compose exec app php artisan migrate:fresh --seed
+
+  seed:
+    cmds:
+      - docker compose exec app php artisan db:seed
+
+  dacapo:
+    cmds:
+      - docker compose exec app php artisan dacapo
+
+  rollback-test:
+    cmds:
+      - docker compose exec app php artisan migrate:fresh
+      - docker compose exec app php artisan migrate:refresh
+
+  optimize:
+    cmds:
+      - docker compose exec app php artisan optimize
+
+  optimize-clear:
+    cmds:
+      - docker compose exec app php artisan optimize:clear
+
+  cache:
+    cmds:
+      - docker compose exec app composer dump-autoload -o
+      - docker compose exec app php artisan optimize
+      - docker compose exec app php artisan event:cache
+      - docker compose exec app php artisan view:cache
+
+  cache-clear:
+    cmds:
+      - docker compose exec app composer clear-cache
+      - docker compose exec app php artisan optimize:clear
+      - docker compose exec app php artisan event:clear
+      - docker compose exec app php artisan view:clear
+
+  db:
+    cmds:
+      - docker compose exec db bash
+
+  sql:
+    cmds:
+      - docker compose exec db bash -c 'mysql -u $$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE'
+
+  redis:
+    cmds:
+      - docker compose exec redis redis-cli
+
+  ide-helper:
+    cmds:
+      - docker compose exec app php artisan clear-compiled
+      - docker compose exec app php artisan ide-helper:generate
+      - docker compose exec app php artisan ide-helper:meta
+      - docker compose exec app php artisan ide-helper:models --nowrite

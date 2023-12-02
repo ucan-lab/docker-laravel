@@ -22,6 +22,10 @@ Build a simple laravel development environment with docker-compose. Compatible w
 3. Execute the following command
 
 ```bash
+$ task create-project
+
+# or...
+
 $ make create-project
 
 # or...
@@ -44,13 +48,29 @@ http://localhost
 2. Execute the following command
 
 ```bash
+# https://taskfile.dev
+$ task install
+
+# or...
+
 $ make install
+
+# or...
+
+$ docker compose build
+$ docker compose up -d
+$ docker compose exec app composer install
+$ docker compose exec app cp .env.example .env
+$ docker compose exec app php artisan key:generate
+$ docker compose exec app php artisan storage:link
+$ docker compose exec app chmod -R 777 storage bootstrap/cache
 ```
 
 http://localhost
 
 ## Tips
 
+- Read this [Taskfile](https://github.com/ucan-lab/docker-laravel/blob/main/Taskfile.yml).
 - Read this [Makefile](https://github.com/ucan-lab/docker-laravel/blob/main/Makefile).
 - Read this [Wiki](https://github.com/ucan-lab/docker-laravel/wiki).
 

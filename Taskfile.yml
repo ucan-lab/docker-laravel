@@ -71,11 +71,15 @@ tasks:
 
   app:
     cmds:
-      - docker compose exec web bash
+      - docker compose exec app bash
 
   tinker:
     cmds:
       - docker compose exec app php artisan tinker
+
+  dump:
+    cmds:
+      - docker compose exec app php artisan dump-server
 
   test:
     cmds:
@@ -142,3 +146,11 @@ tasks:
       - docker compose exec app php artisan ide-helper:generate
       - docker compose exec app php artisan ide-helper:meta
       - docker compose exec app php artisan ide-helper:models --nowrite
+
+  pint:
+    cmds:
+      - docker compose exec app ./vendor/bin/pint -v
+
+  pint-test:
+    cmds:
+      - docker compose exec app ./vendor/bin/pint -v --test

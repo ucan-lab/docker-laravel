@@ -42,6 +42,8 @@ app:
 	docker compose exec app bash
 tinker:
 	docker compose exec app php artisan tinker
+dump:
+	docker compose exec app php artisan dump-server
 test:
 	docker compose exec app php artisan test
 migrate:
@@ -80,3 +82,7 @@ ide-helper:
 	docker compose exec app php artisan ide-helper:generate
 	docker compose exec app php artisan ide-helper:meta
 	docker compose exec app php artisan ide-helper:models --nowrite
+pint:
+	docker compose exec app ./vendor/bin/pint -v
+pint-test:
+	docker compose exec app ./vendor/bin/pint -v --test

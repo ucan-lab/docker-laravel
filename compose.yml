@@ -1,10 +1,12 @@
 volumes:
-  db-store:
+  # db-store:
   psysh-store:
+  pg-store:
+  pgadmin-data:
 
-configs:
-  db-config:
-    file: ./infra/docker/mysql/my.cnf
+# configs:
+#   db-config:
+#     file: ./infra/docker/mysql/my.cnf
 
 services:
   app:
@@ -23,12 +25,18 @@ services:
           nocopy: true
     environment:
       # Please remove this environment variable, after created the Laravel project. Please write in .env
-      - DB_CONNECTION=${DB_CONNECTION:-mysql}
+      # - DB_CONNECTION=${DB_CONNECTION:-mysql}
+      # - DB_HOST=${DB_HOST:-db}
+      # - DB_PORT=${DB_PORT:-3306}
+      # - DB_DATABASE=${DB_DATABASE:-laravel}
+      # - DB_USERNAME=${DB_USERNAME:-phper}
+      # - DB_PASSWORD=${DB_PASSWORD:-secret}
+      - DB_CONNECTION=${DB_CONNECTION:-pgsql}
+      - DB_PORT=${DB_PORT:-5432}
       - DB_HOST=${DB_HOST:-db}
-      - DB_PORT=${DB_PORT:-3306}
-      - DB_DATABASE=${DB_DATABASE:-laravel}
-      - DB_USERNAME=${DB_USERNAME:-phper}
-      - DB_PASSWORD=${DB_PASSWORD:-secret}
+      - DB_DATABASE=${DB_DATABASE:-grow}
+      - DB_USERNAME=${DB_USERNAME:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-root}
 
   web:
     build:
@@ -44,29 +52,49 @@ services:
         source: ./src
         target: /workspace
 
+  # db:
+  #   build:
+  #     context: .
+  #     dockerfile: ./infra/docker/mysql/Dockerfile
+  #   ports:
+  #     - target: 3306
+  #       published: ${DB_PUBLISHED_PORT:-3306}
+  #       protocol: tcp
+  #       mode: host
+  #   configs:
+  #     - source: db-config
+  #       target: /etc/my.cnf
+  #   volumes:
+  #     - type: volume
+  #       source: db-store
+  #       target: /var/lib/mysql
+  #       volume:
+  #         nocopy: true
+  #   environment:
+  #     - MYSQL_DATABASE=${DB_DATABASE:-laravel}
+  #     - MYSQL_USER=${DB_USERNAME:-phper}
+  #     - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
+  #     - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
+
   db:
+    container_name: grow-postgres
     build:
       context: .
-      dockerfile: ./infra/docker/mysql/Dockerfile
+      dockerfile: ./infra/docker/postgre/Dockerfile
+    restart: unless-stopped
     ports:
-      - target: 3306
-        published: ${DB_PUBLISHED_PORT:-3306}
+      - target: 5432
+        published: ${DB_PUBLISHED_PORT:-5432}
         protocol: tcp
         mode: host
-    configs:
-      - source: db-config
-        target: /etc/my.cnf
     volumes:
       - type: volume
-        source: db-store
-        target: /var/lib/mysql
-        volume:
-          nocopy: true
+        source: pg-store
+        target: /var/lib/postgresql/data
     environment:
-      - MYSQL_DATABASE=${DB_DATABASE:-laravel}
-      - MYSQL_USER=${DB_USERNAME:-phper}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
+      - POSTGRES_DB=${DB_DATABASE:-grow}
+      - POSTGRES_USER=${DB_USERNAME:-root}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-root}
 
   mailpit:
     image: axllent/mailpit
@@ -75,3 +103,21 @@ services:
         published: ${MAILPIT_PUBLISHED_PORT:-8025}
         protocol: tcp
         mode: host
+
+  # 未設定volumeの発生源はこれ
+  pgadmin:
+    container_name: grow-pgadmin
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped
+    volumes:
+      # - pgadmin-data:/var/lib/pgadmin4/storage
+      - pgadmin-data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      TZ: Asia/Tokyo
+    depends_on:
+      - db
+    ports:
+      - "4040:80"

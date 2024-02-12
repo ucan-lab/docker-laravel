@@ -7,6 +7,9 @@ install:
 	docker compose exec app php artisan storage:link
 	docker compose exec app chmod -R 777 storage bootstrap/cache
 	@make fresh
+db-refresh:
+	docker compose exec app php artisan migrate:fresh
+	docker compose exec app php artisan db:seed
 create-project:
 	mkdir -p src
 	docker compose build

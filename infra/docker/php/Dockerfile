@@ -1,6 +1,7 @@
 FROM php:8.3-fpm-bullseye AS base
 
 WORKDIR /workspace
+EXPOSE 5173
 
 # timezone environment
 ENV TZ=UTC \
@@ -14,73 +15,72 @@ ENV TZ=UTC \
 
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
-# RUN <<EOF
-#   apt-get update
-#   apt-get -y install --no-install-recommends \
-#     locales \
-#     git \
-#     unzip \
-#     libzip-dev \
-#     libicu-dev \
-#     libonig-dev
-#   locale-gen en_US.UTF-8
-#   localedef -f UTF-8 -i en_US en_US.UTF-8
-#   docker-php-ext-install \
-#     intl \
-#     pdo_mysql \
-#     zip \
-#     bcmath
-#   composer config -g process-timeout 3600
-#   composer config -g repos.packagist composer https://packagist.org
-# EOF
+RUN apt-get update \
+  && apt-get -y install --no-install-recommends \
+    locales \
+    git \
+    unzip \
+    libzip-dev \
+    libicu-dev \
+    libonig-dev \
+    postgresql-client \
+    libpq-dev \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  && locale-gen en_US.UTF-8 \
+  && localedef -f UTF-8 -i en_US en_US.UTF-8 \
+  && docker-php-ext-install \
+    intl \
+    # pdo_mysql \
+    pdo_pgsql \
+    zip \
+    bcmath \
+  && composer config -g process-timeout 3600 \
+  && composer config -g repos.packagist composer https://packagist.org
 
-RUN apt-get update && \
-    apt-get -y install --no-install-recommends \
-      locales \
-      git \
-      unzip \
-      libzip-dev \
-      libicu-dev \
-      libonig-dev && \
-    locale-gen en_US.UTF-8 && \
-    localedef -f UTF-8 -i en_US en_US.UTF-8 && \
-    docker-php-ext-install \
-      intl \
-      pdo_mysql \
-      zip \
-      bcmath && \
-    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
-    php -r "unlink('composer-setup.php');" && \
-    composer config -g process-timeout 3600 && \
-    composer config -g repos.packagist composer https://packagist.org
+#############################################
+# node.jsインストール
+#############################################
+# # パッケージリストを更新し、必要なパッケージをインストール
+# RUN apt-get update && \
+#     apt-get install -y \
+#     ca-certificates \
+#     curl \
+#     gnupg
+
+# # キーリングのディレクトリを作成
+# RUN mkdir -p /etc/apt/keyrings
+
+# # Node.jsのGPGキーをダウンロードしてインストール
+# RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+
+# # Node.jsのメジャーバージョンを設定
+# ARG NODE_MAJOR=20
+
+# # Node.jsのリポジトリをsources.listに追加
+# RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+
+# # パッケージリストを再度更新し、Node.jsをインストール
+# RUN apt-get update && \
+#     apt-get install -y \
+#     nodejs
+
+# # イメージサイズを減らすためにクリーンアップ
+# RUN apt-get clean && \
+#     rm -rf /var/lib/apt/lists/*
 
 
+#############################################
+# 環境別設定
+#############################################
 FROM base AS development
-
-# RUN <<EOF
-#   apt-get -y install --no-install-recommends \
-#     default-mysql-client
-#   apt-get clean
-#   rm -rf /var/lib/apt/lists/*
-# EOF
-
-RUN apt-get update && apt-get -y install --no-install-recommends \
-    default-mysql-client \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
 
 COPY ./infra/docker/php/php.development.ini /usr/local/etc/php/php.ini
 
 FROM development AS development-xdebug
 
-# RUN <<EOF
-#   pecl install xdebug
-#   docker-php-ext-enable xdebug
-# EOF
-
-RUN pecl install xdebug \
- && docker-php-ext-enable xdebug
+RUN pecl install xdebug && \
+  docker-php-ext-enable xdebug
 
 COPY ./infra/docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
@@ -89,18 +89,7 @@ FROM base AS deploy
 COPY ./infra/docker/php/php.deploy.ini /usr/local/etc/php/php.ini
 COPY ./src /workspace
 
-# RUN <<EOF
-#   composer install -q -n --no-ansi --no-dev --no-scripts --no-progress --prefer-dist
-#   chmod -R 777 storage bootstrap/cache
-#   php artisan optimize:clear
-#   php artisan optimize
-#   apt-get clean
-#   rm -rf /var/lib/apt/lists/*
-# EOF
-
-RUN composer install -q -n --no-ansi --no-dev --no-scripts --no-progress --prefer-dist && \
-    chmod -R 777 storage bootstrap/cache && \
-    php artisan optimize:clear && \
-    php artisan optimize && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN composer install -q -n --no-ansi --no-dev --no-scripts --no-progress --prefer-dist \
+  && chmod -R 777 storage bootstrap/cache \
+  && php artisan optimize:clear \
+  && php artisan optimize

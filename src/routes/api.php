@@ -3,6 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\{
+    GroupController,
+};
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,4 +27,7 @@ use App\Http\Controllers\{
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [UserController::class, 'get'])->name('user.get');
+
+
+    Route::get('/group/stores', [GroupController::class, 'getStores']);
 });

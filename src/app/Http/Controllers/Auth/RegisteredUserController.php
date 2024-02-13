@@ -43,8 +43,8 @@ class RegisteredUserController extends Controller
             ]);
         } catch (\Throwable $th) {
             return response([
-                'result' => 'NG',
-                'error' => $th->getMessage()
+                'status' => 'failure',
+                'errors' => [$th->getMessage()]
             ], 400);
         }
 
@@ -71,7 +71,7 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return response([
-            'result' => 'OK',
+            'status' => 'success',
         ], 200);
     }
 }

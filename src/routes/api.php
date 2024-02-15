@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{
     GroupController,
+    StoreController
 };
 
 /*
@@ -31,6 +32,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     Route::get('/group/stores', [GroupController::class, 'getStores']);
+
+    Route::prefix('/store')->group(function () {
+        Route::get('/create', [StoreController::class, 'create'])->name('store.create');
+    });
 
     //
     Route::get('/menuCategories', [MenuCategoryController::class, 'getAll']);

@@ -34,5 +34,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //
     Route::get('/menuCategories', [MenuCategoryController::class, 'getAll']);
-
 });

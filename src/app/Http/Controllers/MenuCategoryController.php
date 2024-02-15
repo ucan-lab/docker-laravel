@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Log\CustomLog;
 use App\Http\Requests\MenuCategory\MenuCategoryRequest;
+use App\Http\Requests\StoreIdRequest;
 use App\Repositories\{
     MenuCategoryRepository\MenuCategoryRepositoryInterface,
     StoreRepository\StoreRepositoryInterface
@@ -24,20 +25,8 @@ class MenuCategoryController extends Controller
         public readonly StoreRepositoryInterface $storeRepo,
     ) {}
 
-    public function getAll(Request $request)
+    public function getAll(StoreIdRequest $request)
     {
-        // リクエストバリデーション
-        try {
-            $request->validate([
-                'storeId' => 'required|integer'
-            ]);
-        } catch (\Throwable $th) {
-            return response([
-                'status' => 'failure',
-                'errors' => ['ストア情報の読み込みができませんでした']
-            ], 400);
-        }
-
         // ストアの取得
         $store = $this->storeRepo->findStore($request->storeId);
 
@@ -45,14 +34,12 @@ class MenuCategoryController extends Controller
             return response()->json([
                 'status' => 'failure',
                 'errors' => ['ストア情報の読み込みができませんでした']
-            ], 500);
+            ], 404);
         }
 
         // Policy確認
-        try {
-            $this->authorize('viewAny', [MenuCategory::class, $store]);
-        } catch (AuthorizationException $e) {
-            return response([
+        if (!$this->authorize('viewAny', [MenuCategory::class, $store])) {
+            return response()->json([
                 'status' => 'failure',
                 'errors' => ['この操作を実行する権限がありません']
             ], 403);

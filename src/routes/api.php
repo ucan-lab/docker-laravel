@@ -32,6 +32,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/group/stores', [GroupController::class, 'getStores']);
 
-    //
+    // ストアに属するメニューカテゴリ一覧取得
     Route::get('/menuCategories', [MenuCategoryController::class, 'getAll']);
 });

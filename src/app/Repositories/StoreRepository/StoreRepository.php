@@ -12,6 +12,8 @@ use Illuminate\Support\Collection;
 
 class StoreRepository implements StoreRepositoryInterface
 {
+    private $model;
+
     public function __construct(Store $store)
     {
         $this->model = $store;
@@ -58,6 +60,16 @@ class StoreRepository implements StoreRepositoryInterface
         return $user->stores;
     }
 
+    /**
+     * ID指定でストアを取得
+     * @param int $id
+     *
+     * @return ?Store
+     */
+    public function findStore(int $id): ?Store
+    {
+        return $this->model->find($id);
+    }
     /***********************************************************
      * Update系
      ***********************************************************/

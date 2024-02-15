@@ -41,6 +41,14 @@ interface StoreRepositoryInterface
      */
     public function getUserStores(User $user): Collection;
 
+    /**
+     * ID指定でストアを取得
+     * @param int $id
+     *
+     * @return ?Store
+     */
+    public function findStore(int $id): ?Store;
+
     /***********************************************************
      * Update系
      ***********************************************************/

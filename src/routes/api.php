@@ -18,7 +18,8 @@ use App\Http\Controllers\{
 |
 */
 use App\Http\Controllers\{
-    UserController
+    UserController,
+    MenuCategoryController
 };
 
 // Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -30,4 +31,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     Route::get('/group/stores', [GroupController::class, 'getStores']);
+
+    //
+    Route::get('/menuCategories', [MenuCategoryController::class, 'getAll']);
+
 });

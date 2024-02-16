@@ -41,6 +41,14 @@ interface TableRepositoryInterface
      */
     public function getAllDisplayTables(Store $store, string $orderBy = 'name', string $sortBy = 'asc'): Collection;
 
+    /**
+     * ID指定で取得
+     * @param int $id
+     *
+     * @return ?Table
+     */
+    public function find(int $id): ?Table;
+
     /***********************************************************
      * Update系
      ***********************************************************/

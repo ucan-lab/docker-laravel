@@ -20,6 +20,7 @@ use App\Http\Controllers\{
 */
 use App\Http\Controllers\{
     UserController,
+    SysMenuCategoryController,
     MenuCategoryController
 };
 
@@ -33,10 +34,20 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/group/stores', [GroupController::class, 'getStores']);
 
+    // システムメニューカテゴリ一覧を取得
+    Route::get('/sysMenuCategories', [SysMenuCategoryController::class, 'getAll']);
+
+    // ストアに属するメニューカテゴリ
     Route::prefix('/store')->group(function () {
         Route::get('/create', [StoreController::class, 'create'])->name('store.create');
     });
 
-    //
-    Route::get('/menuCategories', [MenuCategoryController::class, 'getAll']);
+    // メニューカテゴリー
+    Route::prefix('/menuCategories')->group(function () {
+        Route::get('/', [MenuCategoryController::class, 'getAll']);
+        Route::post('/store', [MenuCategoryController::class, 'store']);
+        Route::get('/{id}', [MenuCategoryController::class, 'get']);
+        Route::put('/{id}', [MenuCategoryController::class, 'update']);
+        Route::delete('/{id}', [MenuCategoryController::class, 'archive']);
+    });
 });

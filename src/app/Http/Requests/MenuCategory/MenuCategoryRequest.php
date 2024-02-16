@@ -3,7 +3,8 @@
 namespace App\Http\Requests\MenuCategory;
 
 use App\Http\Requests\BaseFormRequest;
-
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 class MenuCategoryRequest extends BaseFormRequest
 {
     /**
@@ -27,6 +28,16 @@ class MenuCategoryRequest extends BaseFormRequest
             'menu_category.name' => 'required|string|max:255',
             'menu_category.code' => 'nullable|string|max:255',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors()->all();
+
+        throw new HttpResponseException(response()->json([
+            'status' => 'failure',
+            'errors' => $errors
+        ], 400));
     }
 
     public function messages()

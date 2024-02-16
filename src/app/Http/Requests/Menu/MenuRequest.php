@@ -4,7 +4,8 @@ namespace App\Http\Requests\Menu;
 
 use App\Http\Requests\BaseFormRequest;
 use Illuminate\Validation\Rule;
-
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 class MenuRequest extends BaseFormRequest
 {
     /**
@@ -59,6 +60,16 @@ class MenuRequest extends BaseFormRequest
             'menu.code' => 'nullable|string|max:20',
             'menu.display' => 'required|boolean',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors()->all();
+
+        throw new HttpResponseException(response()->json([
+            'status' => 'failure',
+            'errors' => $errors
+        ], 400));
     }
 
     public function messages()

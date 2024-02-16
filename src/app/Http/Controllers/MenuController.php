@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Menu\MenuRequest;
+use App\Http\Requests\StoreIdRequest;
 use Illuminate\Support\Facades\DB;
 use App\Log\CustomLog;
-use App\Http\Requests\{
-    MenuCategory\MenuCategoryRequest,
-    StoreIdRequest
-};
+use Illuminate\Auth\Access\AuthorizationException;
 use App\Repositories\{
     MenuCategoryRepository\MenuCategoryRepositoryInterface,
-    StoreRepository\StoreRepositoryInterface
+    MenuRepository\MenuRepositoryInterface,
+    StoreRepository\StoreRepositoryInterface,
 };
 use App\Models\{
-    MenuCategory,
+    Menu,
+    SysMenuCategory
 };
-use Illuminate\Auth\Access\AuthorizationException;
 
-class MenuCategoryController extends Controller
+class MenuController extends Controller
 {
     public function __construct(
         public readonly MenuCategoryRepositoryInterface $menuCategoryRepo,
+        public readonly MenuRepositoryInterface $menuRepo,
         public readonly StoreRepositoryInterface $storeRepo,
     ) {}
 
@@ -38,7 +39,7 @@ class MenuCategoryController extends Controller
 
         // Policy確認
         try {
-            $this->authorize('viewAny', [MenuCategory::class, $store]);
+            $this->authorize('viewAny', [Menu::class, $store]);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'status' => 'failure',
@@ -47,17 +48,27 @@ class MenuCategoryController extends Controller
         }
 
         // メニューカテゴリを取得
-        $menuCategories = $this->menuCategoryRepo->getMenuCategoryListByStore($store);
+        $menus = $this->menuRepo->getMenuListByStoreAndSysMenuCategoryIds($store, SysMenuCategory::CATEGORIES['DRINK_FOOD']['id']);
 
         return response()->json([
             'status' => 'success',
-            'data' => $menuCategories
+            'data' => $menus
         ], 200);
     }
-    public function store(MenuCategoryRequest $request)
+
+    public function store(MenuRequest $request)
     {
+        // メニューカテゴリの取得
+        $menuCategory = $this->menuCategoryRepo->find($request->menu['menu_category_id']);
+        if (is_null($menuCategory)) {
+            return response()->json([
+                'status' => 'failure',
+                'errors' => ['メニューカテゴリー情報の読み込みができませんでした']
+            ], 404);
+        }
+
         // ストアの取得
-        $store = $this->storeRepo->findStore($request->menu_category['store_id']);
+        $store = $this->storeRepo->findStore($menuCategory->store_id);
         if (is_null($store)) {
             return response()->json([
                 'status' => 'failure',
@@ -67,7 +78,7 @@ class MenuCategoryController extends Controller
 
         // Policy確認
         try {
-            $this->authorize('create', [MenuCategory::class, $store, $request->menu_category['store_id']]);
+            $this->authorize('store', [Menu::class, $store, $request->menu['menu_category_id']]);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'status' => 'failure',
@@ -75,18 +86,27 @@ class MenuCategoryController extends Controller
             ], 403);
         }
 
-        // 新規登録
-        $this->menuCategoryRepo->createMenuCategory($request->menu_category);
+        $this->menuRepo->createMenu($request->menu);
 
         return response()->json([
-            'status' => 'success'
+            'status' => 'success',
+            'data' => []
         ], 200);
     }
 
     public function get(int $id)
     {
+        // メニューの取得
+        $menu = $this->menuRepo->find($id);
+        if (is_null($menu)) {
+            return response()->json([
+                'status' => 'failure',
+                'errors' => ['メニュー情報の読み込みができませんでした']
+            ], 404);
+        }
+
         // メニューカテゴリの取得
-        $menuCategory = $this->menuCategoryRepo->find($id);
+        $menuCategory = $this->menuCategoryRepo->find($menu->menu_category_id);
         if (is_null($menuCategory)) {
             return response()->json([
                 'status' => 'failure',
@@ -105,7 +125,7 @@ class MenuCategoryController extends Controller
 
         // Policy確認
         try {
-            $this->authorize('viewAny', [MenuCategory::class, $store]);
+            $this->authorize('viewAny', [Menu::class, $store]);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'status' => 'failure',
@@ -113,16 +133,27 @@ class MenuCategoryController extends Controller
             ], 403);
         }
 
+        $menu->store_id = $store->id;
+
         return response()->json([
             'status' => 'success',
-            'data' => $menuCategory
+            'data' => $menu
         ], 200);
     }
 
-    public function update(MenuCategoryRequest $request, int $id)
+    public function update(MenuRequest $request, int $id)
     {
+        // メニューの取得
+        $menu = $this->menuRepo->find($id);
+        if (is_null($menu)) {
+            return response()->json([
+                'status' => 'failure',
+                'errors' => ['メニュー情報の読み込みができませんでした']
+            ], 404);
+        }
+
         // メニューカテゴリの取得
-        $menuCategory = $this->menuCategoryRepo->find($id);
+        $menuCategory = $this->menuCategoryRepo->find($menu->menu_category_id);
         if (is_null($menuCategory)) {
             return response()->json([
                 'status' => 'failure',
@@ -141,7 +172,7 @@ class MenuCategoryController extends Controller
 
         // Policy確認
         try {
-            $this->authorize('update', [MenuCategory::class, $store, $request->menu_category['store_id'], $menuCategory->store_id]);
+            $this->authorize('update', [Menu::class, $store, $menu, $request->menu['menu_category_id']]);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'status' => 'failure',
@@ -154,10 +185,10 @@ class MenuCategoryController extends Controller
 
         try {
             // 現在のレコードを論理削除する
-            $this->menuCategoryRepo->softDeleteMenuCategory($menuCategory);
+            $this->menuRepo->softDeleteMenu($menu);
 
             // 新しいレコードを新規作成する
-            $this->menuCategoryRepo->createMenuCategory($request->menu_category);
+            $this->menuRepo->createMenu($request->menu);
 
             DB::commit();
         } catch (\Throwable $e) {
@@ -181,8 +212,17 @@ class MenuCategoryController extends Controller
 
     public function archive(int $id)
     {
+        // メニューの取得
+        $menu = $this->menuRepo->find($id);
+        if (is_null($menu)) {
+            return response()->json([
+                'status' => 'failure',
+                'errors' => ['メニュー情報の読み込みができませんでした']
+            ], 404);
+        }
+
         // メニューカテゴリの取得
-        $menuCategory = $this->menuCategoryRepo->find($id);
+        $menuCategory = $this->menuCategoryRepo->find($menu->menu_category_id);
         if (is_null($menuCategory)) {
             return response()->json([
                 'status' => 'failure',
@@ -201,7 +241,7 @@ class MenuCategoryController extends Controller
 
         // Policy確認
         try {
-            $this->authorize('delete', [MenuCategory::class, $store, $menuCategory->store_id]);
+            $this->authorize('delete', [Menu::class, $store, $menu->menu_category_id]);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'status' => 'failure',
@@ -210,11 +250,11 @@ class MenuCategoryController extends Controller
         }
 
         // レコードを論理削除する
-        $this->menuCategoryRepo->softDeleteMenuCategory($menuCategory);
+        $this->menuRepo->softDeleteMenu($menu);
 
         return response()->json([
             'status' => 'success',
-            'data' => $menuCategory
+            'data' => []
         ], 200);
     }
 }

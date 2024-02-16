@@ -21,7 +21,8 @@ use App\Http\Controllers\{
 use App\Http\Controllers\{
     UserController,
     SysMenuCategoryController,
-    MenuCategoryController
+    MenuCategoryController,
+    MenuController
 };
 
 // Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -49,5 +50,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}', [MenuCategoryController::class, 'get']);
         Route::put('/{id}', [MenuCategoryController::class, 'update']);
         Route::delete('/{id}', [MenuCategoryController::class, 'archive']);
+    });
+
+    // メニュー
+    Route::prefix('/menus')->group(function () {
+        Route::get('/', [MenuController::class, 'getAll']);
+        Route::post('/store', [MenuController::class, 'store']);
+        Route::get('/{id}', [MenuController::class, 'get']);
+        Route::put('/{id}', [MenuController::class, 'update']);
+        Route::delete('/{id}', [MenuController::class, 'archive']);
     });
 });

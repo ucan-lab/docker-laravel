@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{
     GroupController,
+    StoreController
 };
 
 /*
@@ -37,9 +38,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/sysMenuCategories', [SysMenuCategoryController::class, 'getAll']);
 
     // ストアに属するメニューカテゴリ
-    Route::get('/menuCategories', [MenuCategoryController::class, 'getAll']);
-    Route::post('/menuCategories/store', [MenuCategoryController::class, 'store']);
-    Route::get('/menuCategories/{id}', [MenuCategoryController::class, 'get']);
-    Route::put('/menuCategories/{id}', [MenuCategoryController::class, 'update']);
-    Route::delete('/menuCategories/{id}', [MenuCategoryController::class, 'archive']);
+    Route::prefix('/store')->group(function () {
+        Route::get('/create', [StoreController::class, 'create'])->name('store.create');
+    });
+
+    // メニューカテゴリー
+    Route::prefix('/menuCategories')->group(function () {
+        Route::get('/', [MenuCategoryController::class, 'getAll']);
+        Route::post('/store', [MenuCategoryController::class, 'store']);
+        Route::get('/{id}', [MenuCategoryController::class, 'get']);
+        Route::put('/{id}', [MenuCategoryController::class, 'update']);
+        Route::delete('/{id}', [MenuCategoryController::class, 'archive']);
+    });
 });

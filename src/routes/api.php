@@ -23,7 +23,8 @@ use App\Http\Controllers\{
     SysMenuCategoryController,
     MenuCategoryController,
     MenuController,
-    SetMenuController
+    SetMenuController,
+    SelectionMenuController
 };
 
 // Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -69,5 +70,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}', [SetMenuController::class, 'get']);
         Route::put('/{id}', [SetMenuController::class, 'update']);
         Route::delete('/{id}', [MenuController::class, 'archive']);
+    });
+
+    // 指名メニュー
+    Route::prefix('/selectionMenus')->group(function () {
+        Route::get('/', [SelectionMenuController::class, 'getAll']);
+        Route::post('/store', [SelectionMenuController::class, 'store']);
+        Route::get('/{id}', [SelectionMenuController::class, 'get']);
+        Route::put('/{id}', [SelectionMenuController::class, 'update']);
+        Route::delete('/{id}', [SelectionMenuController::class, 'archive']);
     });
 });

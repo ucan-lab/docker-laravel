@@ -84,6 +84,17 @@ class MenuCategoryRepository implements MenuCategoryRepositoryInterface
     }
 
     /**
+     * TODO: 上の挙動考える
+     * 指定したIDのメニューカテゴリを取得する
+     * @param int $id
+     * @return ?MenuCategory
+     */
+    public function find(int $id): ?MenuCategory
+    {
+        return $this->model->find($id);
+    }
+
+    /**
      * メニューの属するメニューカテゴリを取得する
      * @param Menu $menu
      * @return MenuCategory

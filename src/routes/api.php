@@ -54,7 +54,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // メニューカテゴリー
     Route::prefix('/menuCategories')->group(function () {
         Route::get('/', [MenuCategoryController::class, 'getAll']);
-        Route::post('/store', [MenuCategoryController::class, 'store']);
+        Route::post('/', [MenuCategoryController::class, 'store']);
         Route::get('/{id}', [MenuCategoryController::class, 'get']);
         Route::put('/{id}', [MenuCategoryController::class, 'update']);
         Route::delete('/{id}', [MenuCategoryController::class, 'archive']);
@@ -63,7 +63,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // メニュー
     Route::prefix('/menus')->group(function () {
         Route::get('/', [MenuController::class, 'getAll']);
-        Route::post('/store', [MenuController::class, 'store']);
+        Route::post('/', [MenuController::class, 'store']);
         Route::get('/{id}', [MenuController::class, 'get']);
         Route::put('/{id}', [MenuController::class, 'update']);
         Route::delete('/{id}', [MenuController::class, 'archive']);
@@ -72,7 +72,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // セットメニュー
     Route::prefix('/setMenus')->group(function () {
         Route::get('/', [SetMenuController::class, 'getAll']);
-        Route::post('/store', [SetMenuController::class, 'store']);
+        Route::post('/', [SetMenuController::class, 'store']);
         Route::get('/{id}', [SetMenuController::class, 'get']);
         Route::put('/{id}', [SetMenuController::class, 'update']);
         Route::delete('/{id}', [MenuController::class, 'archive']);
@@ -81,7 +81,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // 指名メニュー
     Route::prefix('/selectionMenus')->group(function () {
         Route::get('/', [SelectionMenuController::class, 'getAll']);
-        Route::post('/store', [SelectionMenuController::class, 'store']);
+        Route::post('/', [SelectionMenuController::class, 'store']);
         Route::get('/{id}', [SelectionMenuController::class, 'get']);
         Route::put('/{id}', [SelectionMenuController::class, 'update']);
         Route::delete('/{id}', [SelectionMenuController::class, 'archive']);
@@ -90,7 +90,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // 卓マスタ
     Route::prefix('/tables')->group(function () {
         Route::get('/', [TableController::class, 'getAll']);
-        Route::post('/store', [TableController::class, 'store']);
+        Route::post('/', [TableController::class, 'store']);
         Route::get('/{id}', [TableController::class, 'get']);
         Route::put('/{id}', [TableController::class, 'update']);
         Route::delete('/{id}', [TableController::class, 'archive']);
@@ -99,7 +99,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // 支払い方法マスタ
     Route::prefix('/paymentMethods')->group(function () {
         Route::get('/', [PaymentMethodController::class, 'getAll']);
-        Route::post('/store', [PaymentMethodController::class, 'store']);
+        Route::post('/', [PaymentMethodController::class, 'store']);
         Route::get('/{id}', [PaymentMethodController::class, 'get']);
         Route::put('/{id}', [PaymentMethodController::class, 'update']);
         Route::delete('/{id}', [PaymentMethodController::class, 'archive']);

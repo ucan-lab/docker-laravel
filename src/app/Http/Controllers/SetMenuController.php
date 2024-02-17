@@ -114,7 +114,7 @@ class SetMenuController extends Controller
             return response()->json([
                 'status' => 'failure',
                 'errors' => [$e->getMessage()]
-            ], 403);
+            ], 500);
         }
 
         return response()->json([

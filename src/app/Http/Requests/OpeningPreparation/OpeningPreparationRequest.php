@@ -3,6 +3,8 @@
 namespace App\Http\Requests\OpeningPreparation;
 
 use App\Http\Requests\BaseFormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
 class OpeningPreparationRequest extends BaseFormRequest
 {
@@ -42,4 +44,13 @@ class OpeningPreparationRequest extends BaseFormRequest
         ];
     }
 
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors()->all();
+
+        throw new HttpResponseException(response()->json([
+            'status' => 'failure',
+            'errors' => $errors
+        ], 400));
+    }
 }

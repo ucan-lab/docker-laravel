@@ -28,6 +28,7 @@ use App\Http\Controllers\{
     TableController,
     PaymentMethodController,
     SysPaymentMethodController,
+    OpeningPreparationController
 };
 
 // Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -103,5 +104,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}', [PaymentMethodController::class, 'get']);
         Route::put('/{id}', [PaymentMethodController::class, 'update']);
         Route::delete('/{id}', [PaymentMethodController::class, 'archive']);
+    });
+
+    // 開店準備
+    Route::prefix('/openingPreparation')->group(function () {
+        Route::post('/', [OpeningPreparationController::class, 'store']);
     });
 });

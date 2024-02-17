@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Log\CustomLog;
 use App\Http\Requests\{
     MenuCategory\MenuCategoryRequest,
-    StoreIdRequest
+    SysMenuCategoryIdRequest
 };
 use App\Repositories\{
     MenuCategoryRepository\MenuCategoryRepositoryInterface,
@@ -24,7 +24,7 @@ class MenuCategoryController extends Controller
         public readonly StoreRepositoryInterface $storeRepo,
     ) {}
 
-    public function getAll(StoreIdRequest $request)
+    public function getAll(SysMenuCategoryIdRequest $request)
     {
         // ストアの取得
         $store = $this->storeRepo->findStore($request->storeId);
@@ -47,7 +47,12 @@ class MenuCategoryController extends Controller
         }
 
         // メニューカテゴリを取得
-        $menuCategories = $this->menuCategoryRepo->getMenuCategoryListByStore($store);
+        // $menuCategories = $this->menuCategoryRepo->getMenuCategoryListByStore($store);
+
+        $menuCategories = $this->menuCategoryRepo->getMenuCategoryListByStoreAndSysMenuCategoryIds(
+            $store,
+            $request->sysMenuCategoryIds
+        );
 
         return response()->json([
             'status' => 'success',

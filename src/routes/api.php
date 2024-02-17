@@ -23,7 +23,11 @@ use App\Http\Controllers\{
     SysMenuCategoryController,
     MenuCategoryController,
     MenuController,
-    SetMenuController
+    SetMenuController,
+    SelectionMenuController,
+    TableController,
+    PaymentMethodController,
+    SysPaymentMethodController,
 };
 
 // Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -38,6 +42,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // システムメニューカテゴリ一覧を取得
     Route::get('/sysMenuCategories', [SysMenuCategoryController::class, 'getAll']);
+
+    // システム支払いカテゴリ
+    Route::get('/sysPaymentMethods', [SysPaymentMethodController::class, 'getAll']);
 
     // ストアに属するメニューカテゴリ
     Route::prefix('/store')->group(function () {
@@ -69,5 +76,32 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}', [SetMenuController::class, 'get']);
         Route::put('/{id}', [SetMenuController::class, 'update']);
         Route::delete('/{id}', [MenuController::class, 'archive']);
+    });
+
+    // 指名メニュー
+    Route::prefix('/selectionMenus')->group(function () {
+        Route::get('/', [SelectionMenuController::class, 'getAll']);
+        Route::post('/store', [SelectionMenuController::class, 'store']);
+        Route::get('/{id}', [SelectionMenuController::class, 'get']);
+        Route::put('/{id}', [SelectionMenuController::class, 'update']);
+        Route::delete('/{id}', [SelectionMenuController::class, 'archive']);
+    });
+
+    // 卓マスタ
+    Route::prefix('/tables')->group(function () {
+        Route::get('/', [TableController::class, 'getAll']);
+        Route::post('/store', [TableController::class, 'store']);
+        Route::get('/{id}', [TableController::class, 'get']);
+        Route::put('/{id}', [TableController::class, 'update']);
+        Route::delete('/{id}', [TableController::class, 'archive']);
+    });
+
+    // 支払い方法マスタ
+    Route::prefix('/paymentMethods')->group(function () {
+        Route::get('/', [PaymentMethodController::class, 'getAll']);
+        Route::post('/store', [PaymentMethodController::class, 'store']);
+        Route::get('/{id}', [PaymentMethodController::class, 'get']);
+        Route::put('/{id}', [PaymentMethodController::class, 'update']);
+        Route::delete('/{id}', [PaymentMethodController::class, 'archive']);
     });
 });

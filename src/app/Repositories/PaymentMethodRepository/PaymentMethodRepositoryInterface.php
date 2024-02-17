@@ -34,6 +34,14 @@ interface PaymentMethodRepositoryInterface
      */
     public function getStorePaymentMethods(Store $store, $columns = array('*'), string $orderBy = 'code', string $sortBy = 'asc'): Collection;
 
+    /**
+     * ID指定で取得
+     * @param int $id
+     *
+     * @return ?PaymentMethod
+     */
+    public function find(int $id): ?PaymentMethod;
+
     /***********************************************************
      * Update系
      ***********************************************************/

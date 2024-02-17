@@ -61,6 +61,17 @@ class TableRepository implements TableRepositoryInterface
             ->get();
     }
 
+    /**
+     * ID指定で取得
+     * @param int $id
+     *
+     * @return ?Table
+     */
+    public function find(int $id): ?Table
+    {
+        return $this->model->find($id);
+    }
+
     /***********************************************************
      * Update系
      ***********************************************************/

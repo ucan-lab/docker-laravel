@@ -5,26 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Log\CustomLog;
 use App\Http\Requests\{
-    MenuCategory\MenuCategoryRequest,
-    SysMenuCategoryIdRequest
-};
-use App\Repositories\{
-    MenuCategoryRepository\MenuCategoryRepositoryInterface,
-    StoreRepository\StoreRepositoryInterface
+    PaymentMethod\PaymentMethodRequest,
+    StoreIdRequest
 };
 use App\Models\{
-    MenuCategory,
+    Store,
+    PaymentMethod
+};
+use App\Repositories\{
+    PaymentMethodRepository\PaymentMethodRepositoryInterface,
+    SysPaymentMethodCategoryRepository\SysPaymentMethodCategoryRepositoryInterface,
+    StoreRepository\StoreRepositoryInterface
 };
 use Illuminate\Auth\Access\AuthorizationException;
 
-class MenuCategoryController extends Controller
+class PaymentMethodController extends Controller
 {
     public function __construct(
-        public readonly MenuCategoryRepositoryInterface $menuCategoryRepo,
+        public readonly PaymentMethodRepositoryInterface $paymentMethodRepo,
+        public readonly SysPaymentMethodCategoryRepositoryInterface $sysPaymentMethodCategoryRepo,
         public readonly StoreRepositoryInterface $storeRepo,
     ) {}
 
-    public function getAll(SysMenuCategoryIdRequest $request)
+    public function getAll(StoreIdRequest $request)
     {
         // ストアの取得
         $store = $this->storeRepo->findStore($request->storeId);
@@ -38,7 +41,7 @@ class MenuCategoryController extends Controller
 
         // Policy確認
         try {
-            $this->authorize('viewAny', [MenuCategory::class, $store]);
+            $this->authorize('viewAny', [PaymentMethod::class, $store]);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'status' => 'failure',
@@ -46,24 +49,19 @@ class MenuCategoryController extends Controller
             ], 403);
         }
 
-        // メニューカテゴリを取得
-        // $menuCategories = $this->menuCategoryRepo->getMenuCategoryListByStore($store);
-
-        $menuCategories = $this->menuCategoryRepo->getMenuCategoryListByStoreAndSysMenuCategoryIds(
-            $store,
-            $request->sysMenuCategoryIds
-        );
+        // 支払い方法を取得
+        $paymentMethods = $this->paymentMethodRepo->getStorePaymentMethods($store);
 
         return response()->json([
             'status' => 'success',
-            'data' => $menuCategories
+            'data' => $paymentMethods
         ], 200);
     }
 
-    public function store(MenuCategoryRequest $request)
+    public function store(PaymentMethodRequest $request)
     {
         // ストアの取得
-        $store = $this->storeRepo->findStore($request->menu_category['store_id']);
+        $store = $this->storeRepo->findStore($request->payment_method['store_id']);
         if (is_null($store)) {
             return response()->json([
                 'status' => 'failure',
@@ -73,7 +71,7 @@ class MenuCategoryController extends Controller
 
         // Policy確認
         try {
-            $this->authorize('create', [MenuCategory::class, $store, $request->menu_category['store_id']]);
+            $this->authorize('create', [PaymentMethod::class, $store, $request->payment_method['store_id']]);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'status' => 'failure',
@@ -82,7 +80,7 @@ class MenuCategoryController extends Controller
         }
 
         // 新規登録
-        $this->menuCategoryRepo->createMenuCategory($request->menu_category);
+        $this->paymentMethodRepo->createPaymentMethod($request->payment_method);
 
         return response()->json([
             'status' => 'success'
@@ -91,17 +89,17 @@ class MenuCategoryController extends Controller
 
     public function get(int $id)
     {
-        // メニューカテゴリの取得
-        $menuCategory = $this->menuCategoryRepo->find($id);
-        if (is_null($menuCategory)) {
+        // 支払い方法の取得
+        $paymentMethod = $this->paymentMethodRepo->find($id);
+        if (is_null($paymentMethod)) {
             return response()->json([
                 'status' => 'failure',
-                'errors' => ['メニューカテゴリー情報の読み込みができませんでした']
+                'errors' => ['支払い方法情報の読み込みができませんでした']
             ], 404);
         }
 
         // ストアの取得
-        $store = $this->storeRepo->findStore($menuCategory->store_id);
+        $store = $this->storeRepo->findStore($paymentMethod->store_id);
         if (is_null($store)) {
             return response()->json([
                 'status' => 'failure',
@@ -111,7 +109,7 @@ class MenuCategoryController extends Controller
 
         // Policy確認
         try {
-            $this->authorize('viewAny', [MenuCategory::class, $store]);
+            $this->authorize('viewAny', [PaymentMethod::class, $store]);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'status' => 'failure',
@@ -121,23 +119,23 @@ class MenuCategoryController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => $menuCategory
+            'data' => $paymentMethod
         ], 200);
     }
 
-    public function update(MenuCategoryRequest $request, int $id)
+    public function update(PaymentMethodRequest $request, int $id)
     {
-        // メニューカテゴリの取得
-        $menuCategory = $this->menuCategoryRepo->find($id);
-        if (is_null($menuCategory)) {
+        // 支払い方法の取得
+        $paymentMethod = $this->paymentMethodRepo->find($id);
+        if (is_null($paymentMethod)) {
             return response()->json([
                 'status' => 'failure',
-                'errors' => ['メニューカテゴリー情報の読み込みができませんでした']
+                'errors' => ['支払い方法情報の読み込みができませんでした']
             ], 404);
         }
 
         // ストアの取得
-        $store = $this->storeRepo->findStore($menuCategory->store_id);
+        $store = $this->storeRepo->findStore($paymentMethod->store_id);
         if (is_null($store)) {
             return response()->json([
                 'status' => 'failure',
@@ -147,7 +145,7 @@ class MenuCategoryController extends Controller
 
         // Policy確認
         try {
-            $this->authorize('update', [MenuCategory::class, $store, $request->menu_category['store_id'], $menuCategory->store_id]);
+            $this->authorize('update', [PaymentMethod::class, $store, $paymentMethod, $request->payment_method['store_id']]);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'status' => 'failure',
@@ -160,10 +158,10 @@ class MenuCategoryController extends Controller
 
         try {
             // 現在のレコードを論理削除する
-            $this->menuCategoryRepo->softDeleteMenuCategory($menuCategory);
+            $this->paymentMethodRepo->softDeletePaymentMethod($paymentMethod);
 
             // 新しいレコードを新規作成する
-            $this->menuCategoryRepo->createMenuCategory($request->menu_category);
+            $this->paymentMethodRepo->createPaymentMethod($request->payment_method);
 
             DB::commit();
         } catch (\Throwable $e) {
@@ -187,17 +185,17 @@ class MenuCategoryController extends Controller
 
     public function archive(int $id)
     {
-        // メニューカテゴリの取得
-        $menuCategory = $this->menuCategoryRepo->find($id);
-        if (is_null($menuCategory)) {
+        // 支払い方法の取得
+        $paymentMethod = $this->paymentMethodRepo->find($id);
+        if (is_null($paymentMethod)) {
             return response()->json([
                 'status' => 'failure',
-                'errors' => ['メニューカテゴリー情報の読み込みができませんでした']
+                'errors' => ['支払い方法情報の読み込みができませんでした']
             ], 404);
         }
 
         // ストアの取得
-        $store = $this->storeRepo->findStore($menuCategory->store_id);
+        $store = $this->storeRepo->findStore($paymentMethod->store_id);
         if (is_null($store)) {
             return response()->json([
                 'status' => 'failure',
@@ -207,7 +205,7 @@ class MenuCategoryController extends Controller
 
         // Policy確認
         try {
-            $this->authorize('delete', [MenuCategory::class, $store, $menuCategory->store_id]);
+            $this->authorize('delete', [PaymentMethod::class, $store, $paymentMethod]);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'status' => 'failure',
@@ -215,12 +213,75 @@ class MenuCategoryController extends Controller
             ], 403);
         }
 
-        // レコードを論理削除する
-        $this->menuCategoryRepo->softDeleteMenuCategory($menuCategory);
+        // 現在のレコードを論理削除する
+        $this->paymentMethodRepo->softDeletePaymentMethod($paymentMethod);
 
         return response()->json([
             'status' => 'success',
             'data' => []
         ], 200);
     }
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Store $store)
+    {
+        // Policy確認
+        $this->authorize('viewAny', [PaymentMethod::class, $store]);
+
+
+
+        return view('payment_method.index', compact('paymentMethods', 'store'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Store $store)
+    {
+        // Policy確認
+        $this->authorize('create', [PaymentMethod::class, $store, $store->id]);
+
+        // システム支払い方法一覧を取得
+        $sysPaymentMethodCategories = $this->sysPaymentMethodCategoryRepo->getSysPaymentMethodCategories();
+
+        return view('payment_method.create', compact('sysPaymentMethodCategories', 'store'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Store $store, PaymentMethod $paymentMethod)
+    {
+        // Policy確認
+        $this->authorize('update', [PaymentMethod::class, $store, $paymentMethod, $store->id]);
+
+        // システム支払い方法一覧を取得
+        $sysPaymentMethodCategories = $this->sysPaymentMethodCategoryRepo->getSysPaymentMethodCategories();
+
+        return view('payment_method.edit', compact('sysPaymentMethodCategories', 'paymentMethod', 'store'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+
+
+
 }

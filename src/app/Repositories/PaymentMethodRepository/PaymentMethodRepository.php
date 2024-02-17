@@ -49,6 +49,17 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
             ->get($columns);
     }
 
+    /**
+     * ID指定で取得
+     * @param int $id
+     *
+     * @return ?PaymentMethod
+     */
+    public function find(int $id): ?PaymentMethod
+    {
+        return $this->model->find($id);
+    }
+
     /***********************************************************
      * Update系
      ***********************************************************/

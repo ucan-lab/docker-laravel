@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BusinessDate;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreIdRequest;
 use Illuminate\Support\Facades\DB;
 use App\Log\CustomLog;
 use App\Models\{
@@ -24,6 +25,32 @@ class OpeningPreparationController extends Controller
         public readonly CashRegisterRepositoryInterface $cashRegisterRepo,
         public readonly StoreRepositoryInterface $storeRepo,
     ) {}
+
+    public function get(StoreIdRequest $request)
+    {
+        // ストアの取得
+        $store = $this->storeRepo->findStore($request->storeId);
+        if (is_null($store)) {
+            return response()->json([
+                'status' => 'failure',
+                'errors' => ['ストア情報の読み込みができませんでした']
+            ], 404);
+        }
+
+        // 営業日付を取得
+        $businessDate = $this->businessDateRepo->getCurrentBusinessDate($store);
+        if (!$businessDate) {
+            return response()->json([
+                'status' => 'failure',
+                'errors' => ['営業情報の読み込みができませんでした']
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $businessDate
+        ], 200);
+    }
 
     public function store(OpeningPreparationRequest $request)
     {

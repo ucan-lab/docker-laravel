@@ -118,7 +118,7 @@ class AttendanceService implements AttendanceServiceInterface
 
         $attendanceData['payment_amount'] = $requestAttendance['payment_amount'];
         $attendanceData['payment_source'] =
-            isset($requestAttendance['payment_source'])
+            ($requestAttendance['payment_source'])
             ? 'other'
             : 'cash_register';
         $attendanceData['payment_type'] = $requestAttendance['payment_type'];

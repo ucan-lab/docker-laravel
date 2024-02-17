@@ -28,7 +28,8 @@ use App\Http\Controllers\{
     TableController,
     PaymentMethodController,
     SysPaymentMethodController,
-    OpeningPreparationController
+    OpeningPreparationController,
+    AttendanceController
 };
 
 // Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -108,6 +109,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // 開店準備
     Route::prefix('/openingPreparation')->group(function () {
+        Route::get('/', [OpeningPreparationController::class, 'get']);
         Route::post('/', [OpeningPreparationController::class, 'store']);
+    });
+
+    // 勤怠
+    Route::prefix('/attendances')->group(function () {
+        Route::get('/', [AttendanceController::class, 'get']);
+        Route::put('/bulkUpdate', [AttendanceController::class, 'bulkUpdate']);
+        Route::put('/updateTardyAbsence', [AttendanceController::class, 'updateTardyAbsence'])->name('attendances.update-tardy-absence');
+        Route::put('/updatePayrollPayment', [AttendanceController::class, 'updatePayrollPayment'])->name('attendances.update-payroll-payment');
     });
 });

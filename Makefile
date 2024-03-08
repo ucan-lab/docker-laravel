@@ -1,3 +1,14 @@
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
+version ?= $(LARAVEL_VERSION)
+
+project:
+	@echo "LARAVEL_VERSION=$(version)" > .env
+	@echo "The laravel version has been saved in the .env file."
+
 install:
 	@make build
 	@make up
@@ -11,7 +22,7 @@ create-project:
 	mkdir -p src
 	docker compose build
 	docker compose up -d
-	docker compose exec app composer create-project --prefer-dist laravel/laravel .
+	docker compose exec app composer create-project --prefer-dist laravel/laravel=$(version) .
 	docker compose exec app php artisan key:generate
 	docker compose exec app php artisan storage:link
 	docker compose exec app chmod -R 777 storage bootstrap/cache

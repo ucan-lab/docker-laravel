@@ -90,7 +90,7 @@ http://localhost
 ### web container
 
 - Base image
-  - [nginx](https://hub.docker.com/_/nginx):1.25
+  - [nginx](https://hub.docker.com/_/nginx):1.26
 
 ### db container
 

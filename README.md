@@ -11,7 +11,7 @@
 
 ## Introduction
 
-Build a simple laravel development environment with docker-compose. Compatible with Windows(WSL2), macOS(M1) and Linux.
+Build a simple laravel development environment with Docker Compose. Support with Windows(WSL2), macOS(Intel and Apple Silicon) and Linux.
 
 ## Usage
 
@@ -22,13 +22,18 @@ Build a simple laravel development environment with docker-compose. Compatible w
 3. Execute the following command
 
 ```bash
+$ task for-linux-env # Linux environment only
 $ task create-project
 
 # or...
 
+$ make for-linux-env # Linux environment only
 $ make create-project
 
 # or...
+
+$ echo "UID=$(id -u)" >> .env # Linux environment only
+$ echo "GID=$(id -g)" >> .env # Linux environment only
 
 $ mkdir -p src
 $ docker compose build
@@ -48,13 +53,18 @@ http://localhost
 2. Execute the following command
 
 ```bash
+$ task for-linux-env # Linux environment only
 $ task install
 
 # or...
 
+$ make for-linux-env # Linux environment only
 $ make install
 
 # or...
+
+$ echo "UID=$(id -u)" >> .env # Linux environment only
+$ echo "GID=$(id -g)" >> .env # Linux environment only
 
 $ docker compose build
 $ docker compose up -d

@@ -11,6 +11,9 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/php/Dockerfile
+      args:
+        UID: ${UID:-65534}
+        GID: ${GID:-65534}
       target: ${APP_BUILD_TARGET:-development}
     volumes:
       - type: bind
@@ -18,7 +21,7 @@ services:
         target: /workspace
       - type: volume
         source: psysh-store
-        target: /root/.config/psysh
+        target: /nonexistent/.config/psysh
         volume:
           nocopy: true
     environment:

@@ -1,6 +1,5 @@
 volumes:
   db-store:
-  psysh-store:
 
 configs:
   db-config:
@@ -11,16 +10,14 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/php/Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
       target: ${APP_BUILD_TARGET:-development}
     volumes:
       - type: bind
         source: ./src
         target: /workspace
-      - type: volume
-        source: psysh-store
-        target: /root/.config/psysh
-        volume:
-          nocopy: true
     environment:
       # Please remove this environment variable, after created the Laravel project. Please write in .env
       - DB_CONNECTION=${DB_CONNECTION:-mysql}

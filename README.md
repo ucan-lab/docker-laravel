@@ -95,7 +95,7 @@ http://localhost
 ### db container
 
 - Base image
-  - [mysql](https://hub.docker.com/_/mysql):8.3
+  - [mysql](https://hub.docker.com/_/mysql):8.4
 
 ### mailpit container
 

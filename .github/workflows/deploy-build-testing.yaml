@@ -1,25 +1,18 @@
 name: deploy-build-testing
-
 on:
   pull_request:
   schedule:
-    - cron:  '0 0 * * *'
-
+    - cron: '0 0 * * *'
 jobs:
   docker-build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Git Clone Project
         run: git clone https://github.com/laravel/laravel.git src
-
       - name: Docker Version
         run: docker version
-
       - name: Docker Compose Settings
         run: echo APP_BUILD_TARGET=deploy > .env
-
       - name: Build Docker Images
         run: docker compose build app

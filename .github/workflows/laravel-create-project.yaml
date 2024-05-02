@@ -1,60 +1,43 @@
 name: laravel-create-project
-
 on:
   pull_request:
   schedule:
-    - cron:  '0 0 * * *'
-
+    - cron: '0 0 * * *'
 jobs:
   docker-build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Docker Version
         run: docker version
-
       - name: Docker Compose Settings
         run: echo APP_BUILD_TARGET=development-xdebug > .env
-
       - name: Build Docker Images
         run: docker compose build
-
       - name: Create & Start Docker Containers
         run: |
           mkdir src
           docker compose up -d
-
       - name: OS Version
         run: |
           docker compose exec app cat /etc/os-release
           docker compose exec app cat /etc/debian_version
-
       - name: PHP Version
         run: docker compose exec app php --version
-
       - name: Composer Version
         run: docker compose exec app composer --version
-
       - name: Create Laravel Project
         run: docker compose exec app composer create-project --prefer-dist laravel/laravel .
-
       - name: Laravel Version
         run: docker compose exec app php artisan --version
-
       - name: Wait for the MySQL container to start
         run: sleep 5s
         shell: bash
-
       - name: Laravel Migrate Testing
         run: docker compose exec app php artisan migrate
-
       - name: Laravel Rollback Testing
         run: docker compose exec app php artisan migrate:refresh
-
       - name: Laravel Seeding Testing
         run: docker compose exec app php artisan db:seed
-
       - name: Laravel PHPUnit Testing
         run: docker compose exec app php artisan test

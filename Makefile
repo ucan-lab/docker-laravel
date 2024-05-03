@@ -1,3 +1,6 @@
+for-linux-env:
+	echo "UID=$$(id -u)" >> .env
+	echo "GID=$$(id -g)" >> .env
 install:
 	@make build
 	@make up

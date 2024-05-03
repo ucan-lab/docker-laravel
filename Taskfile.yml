@@ -1,6 +1,11 @@
 version: '3'
 
 tasks:
+  for-linux-env:
+    cmds:
+      - echo "UID=$(id -u)" >> .env
+      - echo "GID=$(id -g)" >> .env
+
   install:
     cmds:
       - docker compose build

@@ -41,14 +41,11 @@ RUN <<EOF
   chown phper:phper /composer
   chown phper:phper /workspace
   chown phper:phper /home/phper/.config/psysh
-EOF
-
-FROM base AS development
-
-RUN <<EOF
   apt-get clean
   rm -rf /var/lib/apt/lists/*
 EOF
+
+FROM base AS development
 
 COPY ./infra/docker/php/php.development.ini /usr/local/etc/php/php.ini
 
@@ -59,8 +56,6 @@ FROM base AS development-xdebug
 RUN <<EOF
   pecl install xdebug
   docker-php-ext-enable xdebug
-  apt-get clean
-  rm -rf /var/lib/apt/lists/*
 EOF
 
 COPY ./infra/docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
@@ -71,11 +66,6 @@ FROM base AS deploy
 
 COPY ./infra/docker/php/php.deploy.ini /usr/local/etc/php/php.ini
 COPY --chown=phper:phper ./src /workspace
-
-RUN <<EOF
-  apt-get clean
-  rm -rf /var/lib/apt/lists/*
-EOF
 
 USER phper
 

@@ -11,7 +11,7 @@ install:
 	docker compose exec app chmod -R 777 storage bootstrap/cache
 	@make fresh
 create-project:
-	mkdir -p src
+	mkdir src
 	docker compose build
 	docker compose up -d
 	docker compose exec app composer create-project --prefer-dist laravel/laravel .
@@ -22,7 +22,7 @@ create-project:
 build:
 	docker compose build
 up:
-	docker compose up -d
+	docker compose up --detach
 stop:
 	docker compose stop
 down:
@@ -65,7 +65,7 @@ optimize:
 optimize-clear:
 	docker compose exec app php artisan optimize:clear
 cache:
-	docker compose exec app composer dump-autoload -o
+	docker compose exec app composer dump-autoload --optimize
 	@make optimize
 	docker compose exec app php artisan event:cache
 	docker compose exec app php artisan view:cache
@@ -84,8 +84,8 @@ ide-helper:
 	docker compose exec app php artisan clear-compiled
 	docker compose exec app php artisan ide-helper:generate
 	docker compose exec app php artisan ide-helper:meta
-	docker compose exec app php artisan ide-helper:models --nowrite
+	docker compose exec app php artisan ide-helper:models --write --reset
 pint:
-	docker compose exec app ./vendor/bin/pint -v
+	docker compose exec app ./vendor/bin/pint --verbose
 pint-test:
-	docker compose exec app ./vendor/bin/pint -v --test
+	docker compose exec app ./vendor/bin/pint --verbose --test

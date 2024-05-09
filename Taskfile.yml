@@ -19,7 +19,7 @@ tasks:
 
   create-project:
     cmds:
-      - mkdir -p src
+      - mkdir src
       - task: build
       - task: up
       - docker compose exec app composer create-project --prefer-dist laravel/laravel .
@@ -34,7 +34,7 @@ tasks:
 
   up:
     cmds:
-      - docker compose up -d
+      - docker compose up --detach
 
   down:
     cmds:
@@ -117,7 +117,7 @@ tasks:
 
   cache:
     cmds:
-      - docker compose exec app composer dump-autoload -o
+      - docker compose exec app composer dump-autoload --optimize
       - docker compose exec app php artisan optimize
       - docker compose exec app php artisan event:cache
       - docker compose exec app php artisan view:cache
@@ -146,12 +146,12 @@ tasks:
       - docker compose exec app php artisan clear-compiled
       - docker compose exec app php artisan ide-helper:generate
       - docker compose exec app php artisan ide-helper:meta
-      - docker compose exec app php artisan ide-helper:models --nowrite
+      - docker compose exec app php artisan ide-helper:models --write --reset
 
   pint:
     cmds:
-      - docker compose exec app ./vendor/bin/pint -v
+      - docker compose exec app ./vendor/bin/pint --verbose
 
   pint-test:
     cmds:
-      - docker compose exec app ./vendor/bin/pint -v --test
+      - docker compose exec app ./vendor/bin/pint --verbose --test

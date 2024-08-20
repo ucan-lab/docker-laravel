@@ -22,22 +22,21 @@ Build a simple laravel development environment with Docker Compose. Support with
 3. Execute the following command
 
 ```bash
-$ task for-linux-env # Linux environment only
 $ task create-project
 
 # or...
 
-$ make for-linux-env # Linux environment only
 $ make create-project
 
-# or...
+# or... Linux environment
 
-$ echo "UID=$(id -u)" >> .env # Linux environment only
-$ echo "GID=$(id -g)" >> .env # Linux environment only
+$ echo "UID=$(id -u)" >> .env
+$ echo "GID=$(id -g)" >> .env
+$ echo "USERNAME=$(whoami)" >> .env
 
 $ mkdir -p src
 $ docker compose build
-$ docker compose up -d
+$ docker compose --file compose.yaml --file compose-for-linux.yaml up --detach
 $ docker compose exec app composer create-project --prefer-dist laravel/laravel .
 $ docker compose exec app php artisan key:generate
 $ docker compose exec app php artisan storage:link
@@ -53,21 +52,20 @@ http://localhost
 2. Execute the following command
 
 ```bash
-$ task for-linux-env # Linux environment only
 $ task install
 
 # or...
 
-$ make for-linux-env # Linux environment only
 $ make install
 
-# or...
+# or... Linux environment
 
-$ echo "UID=$(id -u)" >> .env # Linux environment only
-$ echo "GID=$(id -g)" >> .env # Linux environment only
+$ echo "UID=$(id -u)" >> .env
+$ echo "GID=$(id -g)" >> .env
+$ echo "USERNAME=$(whoami)" >> .env
 
 $ docker compose build
-$ docker compose up -d
+$ docker compose --file compose.yaml --file compose-for-linux.yaml up --detach
 $ docker compose exec app composer install
 $ docker compose exec app cp .env.example .env
 $ docker compose exec app php artisan key:generate

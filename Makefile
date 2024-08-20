@@ -1,6 +1,7 @@
 for-linux-env:
 	echo "UID=$$(id -u)" >> .env
 	echo "GID=$$(id -g)" >> .env
+	echo "USERNAME=$$(whoami)" >> .env
 install:
 	@make build
 	@make up
@@ -11,7 +12,7 @@ install:
 	docker compose exec app chmod -R 777 storage bootstrap/cache
 	@make fresh
 create-project:
-	mkdir src
+	mkdir src -p
 	docker compose build
 	docker compose up -d
 	docker compose exec app composer create-project --prefer-dist laravel/laravel .
@@ -23,6 +24,8 @@ build:
 	docker compose build
 up:
 	docker compose up --detach
+up-for-linux:
+	docker compose --file compose.yaml --file compose-for-linux.yaml up --detach
 stop:
 	docker compose stop
 down:

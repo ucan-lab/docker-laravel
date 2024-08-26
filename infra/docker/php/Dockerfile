@@ -16,16 +16,17 @@ ARG GID=1000
 
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
+# hadolint ignore=DL3008
 RUN <<EOF
   apt-get update
   apt-get -y install --no-install-recommends \
-    locales=2.31-13+deb11u10 \
-    git=1:2.30.2-1+deb11u2 \
-    unzip=6.0-26+deb11u1 \
-    libzip-dev=1.7.3-1 \
-    libicu-dev=67.1-7 \
-    libonig-dev=6.9.6-1.1 \
-    default-mysql-client=1.0.7
+    locales \
+    git \
+    unzip \
+    libzip-dev \
+    libicu-dev \
+    libonig-dev \
+    default-mysql-client
   locale-gen en_US.UTF-8
   localedef -f UTF-8 -i en_US en_US.UTF-8
   docker-php-ext-install \

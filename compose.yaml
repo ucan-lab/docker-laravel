@@ -6,9 +6,6 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/php/Dockerfile
-      args:
-        UID: ${UID:-1000}
-        GID: ${GID:-1000}
       target: ${APP_BUILD_TARGET:-development}
     volumes:
       - type: bind

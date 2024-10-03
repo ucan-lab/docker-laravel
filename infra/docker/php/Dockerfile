@@ -14,7 +14,7 @@ ENV TZ=UTC \
 ARG UID=1000
 ARG GID=1000
 
-COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
 
 # hadolint ignore=DL3008
 RUN <<EOF

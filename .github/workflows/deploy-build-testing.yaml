@@ -7,7 +7,7 @@ jobs:
   deploy-build-testing:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Git Clone Project
         run: git clone https://github.com/laravel/laravel.git src
       - name: Docker Version

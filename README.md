@@ -108,18 +108,18 @@ http://localhost
 ### app container
 
 - Base image
-  - [php](https://hub.docker.com/_/php):8.3-fpm-bullseye
-  - [composer](https://hub.docker.com/_/composer):2.7
+  - [php](https://hub.docker.com/_/php):8.4-fpm-bullseye
+  - [composer](https://hub.docker.com/_/composer):2.10
 
 ### web container
 
 - Base image
-  - [nginx](https://hub.docker.com/_/nginx):1.26
+  - [nginx](https://hub.docker.com/_/nginx):1.31
 
 ### db container
 
 - Base image
-  - [mysql](https://hub.docker.com/_/mysql):8.4
+  - [mysql](https://hub.docker.com/_/mysql):9.7
 
 ### mailpit container
 

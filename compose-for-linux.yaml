@@ -1,0 +1,8 @@
+services:
+  app:
+    entrypoint: ["/usr/local/bin/entrypoint.sh"]
+    command: ["php-fpm"]
+    environment:
+      - UID=${UID}
+      - GID=${GID}
+      - USERNAME=${USERNAME}

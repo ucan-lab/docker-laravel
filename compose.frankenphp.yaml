@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./infra/docker/php-frankenphp/Dockerfile
+    ports:
+      - target: 80
+        published: ${APP_PUBLISHED_PORT:-80}
+        protocol: tcp
+        mode: host
+    environment:
+      - UID=${UID:-1000}
+      - GID=${GID:-1000}
+      - USERNAME=${USERNAME:-phper}
+
+  # nginx is unused in the FrankenPHP overlay; FrankenPHP serves HTTP itself.
+  web:
+    profiles:
+      - donotstart

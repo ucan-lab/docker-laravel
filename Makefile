@@ -95,3 +95,20 @@ pint:
 	docker compose exec app ./vendor/bin/pint --verbose
 pint-test:
 	docker compose exec app ./vendor/bin/pint --verbose --test
+build-frankenphp:
+	docker compose -f compose.yaml -f compose.frankenphp.yaml build
+up-frankenphp:
+	docker compose -f compose.yaml -f compose.frankenphp.yaml rm --stop --force web
+	docker compose -f compose.yaml -f compose.frankenphp.yaml up --detach --remove-orphans
+down-frankenphp:
+	docker compose -f compose.yaml -f compose.frankenphp.yaml down --remove-orphans
+install-frankenphp:
+	@make build-frankenphp
+	@make up-frankenphp
+	docker compose -f compose.yaml -f compose.frankenphp.yaml exec app composer install
+	docker compose -f compose.yaml -f compose.frankenphp.yaml exec app cp .env.example .env
+	docker compose -f compose.yaml -f compose.frankenphp.yaml exec app sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+	docker compose -f compose.yaml -f compose.frankenphp.yaml exec app php artisan key:generate
+	docker compose -f compose.yaml -f compose.frankenphp.yaml exec app php artisan storage:link
+	docker compose -f compose.yaml -f compose.frankenphp.yaml exec app chmod -R 777 storage bootstrap/cache
+	docker compose -f compose.yaml -f compose.frankenphp.yaml exec app php artisan migrate --force

@@ -13,6 +13,19 @@
 
 Build a simple laravel development environment with Docker Compose. Support with Windows(WSL2), macOS(Intel and Apple Silicon) and Linux.
 
+## Requirements
+
+- **Docker Engine v23.0+ (BuildKit enabled by default) or the latest Docker Desktop**
+
+The Dockerfile uses [here-documents (`RUN <<EOF`)](https://docs.docker.com/reference/dockerfile/#here-documents), which require [BuildKit](https://docs.docker.com/build/buildkit/). When BuildKit is disabled (e.g. an old Docker version or the legacy builder), the `RUN` instructions are silently skipped, so required packages such as `git` are never installed. The build still succeeds, but `composer install` later fails with `git was not found in your PATH`.
+
+BuildKit is enabled by default on Docker Engine v23.0+ and Docker Desktop. If you must use an older Docker, enable it explicitly before building:
+
+```bash
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+```
+
 ## Usage
 
 ### Create an initial Laravel project

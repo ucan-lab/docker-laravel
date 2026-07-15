@@ -91,6 +91,44 @@ $ docker compose exec app chmod -R 777 storage bootstrap/cache
 
 http://localhost
 
+## FrankenPHP (opt-in alternative stack)
+
+[FrankenPHP](https://frankenphp.dev/) is available as an opt-in alternative to the default `nginx` + `php-fpm` stack. The default stack is **unchanged**; FrankenPHP is activated only when you explicitly pass the overlay file.
+
+Key differences from the default stack:
+
+- A single `app` container replaces both `app` and `web` (FrankenPHP serves HTTP itself on port 80).
+- Runs in classic mode — file changes in `./src` are reflected immediately without rebuilding.
+- An `xdebug` build target (`development-xdebug`) is available via `APP_BUILD_TARGET`.
+- Run only one stack at a time — both bind port 80 and share the same Compose project. The `*-frankenphp` targets stop the default `web` container for you; if you start the overlay manually after the default stack, run `docker compose down` first.
+
+### Use FrankenPHP with an existing Laravel project
+
+```bash
+$ task install-frankenphp
+
+# or...
+
+$ make install-frankenphp
+
+# or... manually
+
+$ docker compose -f compose.yaml -f compose.frankenphp.yaml build
+$ docker compose -f compose.yaml -f compose.frankenphp.yaml rm --stop --force web
+$ docker compose -f compose.yaml -f compose.frankenphp.yaml up --detach --remove-orphans
+$ docker compose -f compose.yaml -f compose.frankenphp.yaml exec app composer install
+$ docker compose -f compose.yaml -f compose.frankenphp.yaml exec app cp .env.example .env
+$ docker compose -f compose.yaml -f compose.frankenphp.yaml exec app sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+$ docker compose -f compose.yaml -f compose.frankenphp.yaml exec app php artisan key:generate
+$ docker compose -f compose.yaml -f compose.frankenphp.yaml exec app php artisan storage:link
+$ docker compose -f compose.yaml -f compose.frankenphp.yaml exec app chmod -R 777 storage bootstrap/cache
+$ docker compose -f compose.yaml -f compose.frankenphp.yaml exec app php artisan migrate --force
+```
+
+On Linux, set your host UID/GID first so files generated in `./src` are owned by you. Run `task for-linux-env` (or append `UID=$(id -u)`, `GID=$(id -g)`, `USERNAME=$(whoami)` to `.env`) before the commands above; the FrankenPHP entrypoint reads these and falls back to `1000:1000` when they are unset.
+
+http://localhost
+
 ## Tips
 
 - Read this [Taskfile](https://github.com/ucan-lab/docker-laravel/blob/main/Taskfile.yml).
@@ -110,6 +148,7 @@ http://localhost
 - Base image
   - [php](https://hub.docker.com/_/php):8.4-fpm-bullseye
   - [composer](https://hub.docker.com/_/composer):2.10
+  - (FrankenPHP overlay) [dunglas/frankenphp](https://hub.docker.com/r/dunglas/frankenphp):1-php8.4
 
 ### web container
 

@@ -11,7 +11,7 @@ ENV TZ=UTC \
   # composer environment
   COMPOSER_HOME=/composer
 
-COPY --from=composer:2.10 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.11 /usr/bin/composer /usr/bin/composer
 
 # hadolint ignore=DL3008
 RUN <<EOF
